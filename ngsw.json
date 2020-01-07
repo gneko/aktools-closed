@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1578315049607,
+  "timestamp": 1578395850635,
   "index": "https://Ark.YuePlus.ink/index.html",
   "assetGroups": [
     {
@@ -10,13 +10,13 @@
       "urls": [
         "https://Ark.YuePlus.ink/favicon.ico",
         "https://Ark.YuePlus.ink/index.html",
-        "https://Ark.YuePlus.ink/main-es2015.e6b1cd6b67f04f28270b.js",
-        "https://Ark.YuePlus.ink/main-es5.e6b1cd6b67f04f28270b.js",
-        "https://Ark.YuePlus.ink/polyfills-es2015.94c6790f020024135df9.js",
-        "https://Ark.YuePlus.ink/polyfills-es5.756e41898b8ad54b68df.js",
-        "https://Ark.YuePlus.ink/runtime-es2015.af459c4e6ed6bc273fd7.js",
-        "https://Ark.YuePlus.ink/runtime-es5.af459c4e6ed6bc273fd7.js",
-        "https://Ark.YuePlus.ink/styles.17f93170d30ee556294f.css"
+        "https://Ark.YuePlus.ink/main-es2015.401f9e856964fb36ce95.js",
+        "https://Ark.YuePlus.ink/main-es5.401f9e856964fb36ce95.js",
+        "https://Ark.YuePlus.ink/polyfills-es2015.a69ecc0745e4f539a445.js",
+        "https://Ark.YuePlus.ink/polyfills-es5.db87e958f14988ef8e41.js",
+        "https://Ark.YuePlus.ink/runtime-es2015.15ebccd70c41d28d4223.js",
+        "https://Ark.YuePlus.ink/runtime-es5.15ebccd70c41d28d4223.js",
+        "https://Ark.YuePlus.ink/styles.b4aa34f8908565182c9a.css"
       ],
       "patterns": []
     },
@@ -414,14 +414,14 @@
     "https://Ark.YuePlus.ink/assets/img/material/sprite_exp_card_t3.png": "6c51eb54b064bff654357b4cc6bb0b223d0b889c",
     "https://Ark.YuePlus.ink/assets/img/material/sprite_exp_card_t4.png": "0ed2d6dad7658e24f2d333d7e10f1733b844183d",
     "https://Ark.YuePlus.ink/favicon.ico": "ca1864b98091318390dae46fbab1232aa2833e2e",
-    "https://Ark.YuePlus.ink/index.html": "6171c4833329d450de64751f78104c47a18659aa",
-    "https://Ark.YuePlus.ink/main-es2015.e6b1cd6b67f04f28270b.js": "0e09782ad64677386903f2dd8798457d8e7f1523",
-    "https://Ark.YuePlus.ink/main-es5.e6b1cd6b67f04f28270b.js": "648a86519ac3d3f25c2c330a33bef42014d597b1",
-    "https://Ark.YuePlus.ink/polyfills-es2015.94c6790f020024135df9.js": "3ff235cd0294c8dfbe6145192d9974c61ccd12ad",
-    "https://Ark.YuePlus.ink/polyfills-es5.756e41898b8ad54b68df.js": "824f00410cbb863f28d48fb27a23e57919a3b686",
-    "https://Ark.YuePlus.ink/runtime-es2015.af459c4e6ed6bc273fd7.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
-    "https://Ark.YuePlus.ink/runtime-es5.af459c4e6ed6bc273fd7.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
-    "https://Ark.YuePlus.ink/styles.17f93170d30ee556294f.css": "4839a4461e094982dc94dfe3efb91d5f96b4a51d"
+    "https://Ark.YuePlus.ink/index.html": "b53d79b3a8311f00ff680afe365ff0004d57a312",
+    "https://Ark.YuePlus.ink/main-es2015.401f9e856964fb36ce95.js": "71c634ce09604fa098caf30bff503d32d7b0dfb4",
+    "https://Ark.YuePlus.ink/main-es5.401f9e856964fb36ce95.js": "7e412ea8e51b99e4147528929c0a9be000c15be1",
+    "https://Ark.YuePlus.ink/polyfills-es2015.a69ecc0745e4f539a445.js": "3ff235cd0294c8dfbe6145192d9974c61ccd12ad",
+    "https://Ark.YuePlus.ink/polyfills-es5.db87e958f14988ef8e41.js": "824f00410cbb863f28d48fb27a23e57919a3b686",
+    "https://Ark.YuePlus.ink/runtime-es2015.15ebccd70c41d28d4223.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "https://Ark.YuePlus.ink/runtime-es5.15ebccd70c41d28d4223.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "https://Ark.YuePlus.ink/styles.b4aa34f8908565182c9a.css": "190c9d36af902bc5186b1d5c06773db3a42c7674"
   },
   "navigationUrls": [
     {
