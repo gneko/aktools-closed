@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1578868852237,
+  "timestamp": 1578869123696,
   "index": "https://Ark.YuePlus.ink/index.html",
   "assetGroups": [
     {
@@ -414,7 +414,7 @@
     "https://Ark.YuePlus.ink/assets/img/material/sprite_exp_card_t3.png": "6c51eb54b064bff654357b4cc6bb0b223d0b889c",
     "https://Ark.YuePlus.ink/assets/img/material/sprite_exp_card_t4.png": "0ed2d6dad7658e24f2d333d7e10f1733b844183d",
     "https://Ark.YuePlus.ink/favicon.ico": "ca1864b98091318390dae46fbab1232aa2833e2e",
-    "https://Ark.YuePlus.ink/index.html": "29b2f62bb0c0b2d28c3140078f90d2a291c92519",
+    "https://Ark.YuePlus.ink/index.html": "990c6f6819b56d8963628fda055a3ff91cb4f94a",
     "https://Ark.YuePlus.ink/main-es2015.53a8dfc7027742323372.js": "4d1bd9d9b10278794d7281550b5745f3f24b5388",
     "https://Ark.YuePlus.ink/main-es5.53a8dfc7027742323372.js": "20f7dcc70482fae1dfe23b674077dcd674f80510",
     "https://Ark.YuePlus.ink/polyfills-es2015.a69ecc0745e4f539a445.js": "3ff235cd0294c8dfbe6145192d9974c61ccd12ad",
