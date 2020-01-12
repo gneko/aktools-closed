@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1578863993898,
+  "timestamp": 1578868157206,
   "index": "https://Ark.YuePlus.ink/index.html",
   "assetGroups": [
     {
@@ -10,8 +10,8 @@
       "urls": [
         "https://Ark.YuePlus.ink/favicon.ico",
         "https://Ark.YuePlus.ink/index.html",
-        "https://Ark.YuePlus.ink/main-es2015.731cf9f7d1327aa7a17c.js",
-        "https://Ark.YuePlus.ink/main-es5.731cf9f7d1327aa7a17c.js",
+        "https://Ark.YuePlus.ink/main-es2015.53a8dfc7027742323372.js",
+        "https://Ark.YuePlus.ink/main-es5.53a8dfc7027742323372.js",
         "https://Ark.YuePlus.ink/polyfills-es2015.a69ecc0745e4f539a445.js",
         "https://Ark.YuePlus.ink/polyfills-es5.db87e958f14988ef8e41.js",
         "https://Ark.YuePlus.ink/runtime-es2015.15ebccd70c41d28d4223.js",
@@ -414,9 +414,9 @@
     "https://Ark.YuePlus.ink/assets/img/material/sprite_exp_card_t3.png": "6c51eb54b064bff654357b4cc6bb0b223d0b889c",
     "https://Ark.YuePlus.ink/assets/img/material/sprite_exp_card_t4.png": "0ed2d6dad7658e24f2d333d7e10f1733b844183d",
     "https://Ark.YuePlus.ink/favicon.ico": "ca1864b98091318390dae46fbab1232aa2833e2e",
-    "https://Ark.YuePlus.ink/index.html": "3467cd9d7a92963461ac72898e5ecbac279581d3",
-    "https://Ark.YuePlus.ink/main-es2015.731cf9f7d1327aa7a17c.js": "915bc0ef0e0901f02a597fb44bb8f7aaf6133f35",
-    "https://Ark.YuePlus.ink/main-es5.731cf9f7d1327aa7a17c.js": "94185ecf8153ecef05038e4458316b978339b152",
+    "https://Ark.YuePlus.ink/index.html": "f9c5db82f15af5a6c49f01e8dbbbfb5e52ec3ebe",
+    "https://Ark.YuePlus.ink/main-es2015.53a8dfc7027742323372.js": "4d1bd9d9b10278794d7281550b5745f3f24b5388",
+    "https://Ark.YuePlus.ink/main-es5.53a8dfc7027742323372.js": "20f7dcc70482fae1dfe23b674077dcd674f80510",
     "https://Ark.YuePlus.ink/polyfills-es2015.a69ecc0745e4f539a445.js": "3ff235cd0294c8dfbe6145192d9974c61ccd12ad",
     "https://Ark.YuePlus.ink/polyfills-es5.db87e958f14988ef8e41.js": "824f00410cbb863f28d48fb27a23e57919a3b686",
     "https://Ark.YuePlus.ink/runtime-es2015.15ebccd70c41d28d4223.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
