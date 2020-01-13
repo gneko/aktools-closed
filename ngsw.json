@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1578870465384,
+  "timestamp": 1578943857694,
   "index": "https://Ark.YuePlus.ink/index.html",
   "assetGroups": [
     {
@@ -10,8 +10,8 @@
       "urls": [
         "https://Ark.YuePlus.ink/favicon.ico",
         "https://Ark.YuePlus.ink/index.html",
-        "https://Ark.YuePlus.ink/main-es2015.53a8dfc7027742323372.js",
-        "https://Ark.YuePlus.ink/main-es5.53a8dfc7027742323372.js",
+        "https://Ark.YuePlus.ink/main-es2015.5aaaa00ebd2c33b7dfec.js",
+        "https://Ark.YuePlus.ink/main-es5.5aaaa00ebd2c33b7dfec.js",
         "https://Ark.YuePlus.ink/polyfills-es2015.a69ecc0745e4f539a445.js",
         "https://Ark.YuePlus.ink/polyfills-es5.db87e958f14988ef8e41.js",
         "https://Ark.YuePlus.ink/runtime-es2015.15ebccd70c41d28d4223.js",
@@ -120,6 +120,7 @@
         "https://Ark.YuePlus.ink/assets/img/help/iconstr1.jpg",
         "https://Ark.YuePlus.ink/assets/img/help/iconstr2.jpg",
         "https://Ark.YuePlus.ink/assets/img/main/Luke_lu.jpg",
+        "https://Ark.YuePlus.ink/assets/img/main/Yue_plus.png",
         "https://Ark.YuePlus.ink/assets/img/main/bbaa.png",
         "https://Ark.YuePlus.ink/assets/img/main/crystal.jpg",
         "https://Ark.YuePlus.ink/assets/img/main/github.png",
@@ -317,6 +318,7 @@
     "https://Ark.YuePlus.ink/assets/img/help/iconstr1.jpg": "5a5f91191a3b3b5f49ea398ad35447f42239a22b",
     "https://Ark.YuePlus.ink/assets/img/help/iconstr2.jpg": "6f238cbc9421620607edd6e71dfba49ff1c9bc9a",
     "https://Ark.YuePlus.ink/assets/img/main/Luke_lu.jpg": "11387bd07a30f6c73792b8c9580730b1378f4eb3",
+    "https://Ark.YuePlus.ink/assets/img/main/Yue_plus.png": "52b9598e19a8d3705b1e43998663a689a6c72aa7",
     "https://Ark.YuePlus.ink/assets/img/main/bbaa.png": "912eb5d01c0cd7c3fd8e9f47910c99d3de02ab34",
     "https://Ark.YuePlus.ink/assets/img/main/crystal.jpg": "67a369053056228e1f385b73a16fe714441e5e85",
     "https://Ark.YuePlus.ink/assets/img/main/github.png": "a933a871a1d57b4551c2455343c7eb5571cabf52",
@@ -414,9 +416,9 @@
     "https://Ark.YuePlus.ink/assets/img/material/sprite_exp_card_t3.png": "6c51eb54b064bff654357b4cc6bb0b223d0b889c",
     "https://Ark.YuePlus.ink/assets/img/material/sprite_exp_card_t4.png": "0ed2d6dad7658e24f2d333d7e10f1733b844183d",
     "https://Ark.YuePlus.ink/favicon.ico": "ca1864b98091318390dae46fbab1232aa2833e2e",
-    "https://Ark.YuePlus.ink/index.html": "990c6f6819b56d8963628fda055a3ff91cb4f94a",
-    "https://Ark.YuePlus.ink/main-es2015.53a8dfc7027742323372.js": "4d1bd9d9b10278794d7281550b5745f3f24b5388",
-    "https://Ark.YuePlus.ink/main-es5.53a8dfc7027742323372.js": "20f7dcc70482fae1dfe23b674077dcd674f80510",
+    "https://Ark.YuePlus.ink/index.html": "f3b637cfdbad67f6b518d67928d5cc1596b137c5",
+    "https://Ark.YuePlus.ink/main-es2015.5aaaa00ebd2c33b7dfec.js": "f6c6296061d5a820a433bd4df2fd7768a7d3c507",
+    "https://Ark.YuePlus.ink/main-es5.5aaaa00ebd2c33b7dfec.js": "7b0f0b4e5d31c75ac535d27db80fd614c9372689",
     "https://Ark.YuePlus.ink/polyfills-es2015.a69ecc0745e4f539a445.js": "3ff235cd0294c8dfbe6145192d9974c61ccd12ad",
     "https://Ark.YuePlus.ink/polyfills-es5.db87e958f14988ef8e41.js": "824f00410cbb863f28d48fb27a23e57919a3b686",
     "https://Ark.YuePlus.ink/runtime-es2015.15ebccd70c41d28d4223.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
