@@ -21,8 +21,6 @@ jobs:
           node-version: "10.15.3"
       - name: npm install, build, and deploy
         run: |
-          pip install requests
-          python ./tools/extractMaterials.py 
           npm i -s
           npm install -g @angular/cli
           ng build --prod --base-href "https://aktools.graueneko.xyz/"
@@ -47,8 +45,6 @@ jobs:
           node-version: "10.15.3"
       - name: npm install, build, and deploy
         run: |
-          pip install requests
-          python ./tools/extractMaterials.py 
           npm i -s
           npm install -g @angular/cli
           ng build --prod --base-href "https://aktoolscn.graueneko.xyz/"
@@ -57,5 +53,5 @@ jobs:
           CI: true
           TOKEN: ${{ secrets.CODING_TOKEN }}
           CNAME: aktoolscn.graueneko.xyz
-          REPO: git.dev.tencent.com/graueneko/aktools.git
+          REPO: e.coding.net/graueneko/aktools.git
           PROJECT: aktools

@@ -19,21 +19,21 @@ jobs:
         with:
           node-version: "10.15.3"
       - name: Fetch data version
-        run: curl -sL https://api.github.com/repos/Kengxxiao/ArknightsGameData/commits |grep -m1 "CN UPDATE" > version/data
-      - name: Check update by git
-        id: git-check
-        run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
-      - name: npm install, build, and deploy
-        if: steps.git-check.outputs.modified == 'true'
         run: |
-          pip install requests
-          python ./tools/extractMaterials.py
-          git config --global user.name "Neko Bot"
-          git config --global user.email "graueneko@gmail.com"
-          git remote set-url origin https://x-access-token:$TOKEN@$REPO
-          git checkout "${GITHUB_REF:11}"
-          git commit -am "数据更新"
-          git push
+          curl -sL https://api.github.com/repos/Kengxxiao/ArknightsGameData/commits |grep -m1 "CN UPDATE" > version/data
+          if 
+      - name: npm install, build, and deploy
+        run: |
+          if [[`git status --porcelain`]]; then
+            pip install requests
+            python ./tools/extractMaterials.py
+            git config --global user.name "Neko Bot"
+            git config --global user.email "graueneko@gmail.com"
+            git remote set-url origin https://x-access-token:$TOKEN@$REPO
+            git checkout "${GITHUB_REF:11}"
+            git commit -am "数据更新"
+            git push
+          fi
         env:
           CI: true
           TOKEN: ${{ secrets.GH_TOKEN }}
@@ -54,23 +54,21 @@ jobs:
           node-version: "10.15.3"
       - name: Fetch data version
         run: curl -sL https://api.github.com/repos/Kengxxiao/ArknightsGameData/commits |grep -m1 "CN UPDATE" > version/data
-      - name: Check update by git
-        id: git-check
-        run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
       - name: npm install, build, and deploy
-        if: steps.git-check.outputs.modified == 'true'
         run: |
-          pip install requests
-          python ./tools/extractMaterials.py
-          git config --global user.name "Neko Bot"
-          git config --global user.email "graueneko@gmail.com"
-          git remote set-url origin https://$TOKEN@$REPO
-          git checkout "${GITHUB_REF:11}"
-          git commit -am "数据更新"
-          git push
+          if [[`git status --porcelain`]]; then
+            pip install requests
+            python ./tools/extractMaterials.py
+            git config --global user.name "Neko Bot"
+            git config --global user.email "graueneko@gmail.com"
+            git remote set-url origin https://$TOKEN@$REPO
+            git checkout "${GITHUB_REF:11}"
+            git commit -am "数据更新"
+            git push
+          fi
         env:
           CI: true
           TOKEN: ${{ secrets.CODING_TOKEN }}
           CNAME: aktoolscn.graueneko.xyz
-          REPO: git.dev.tencent.com/graueneko/aktools.git
+          REPO: e.coding.net/graueneko/aktools.git
           PROJECT: aktools

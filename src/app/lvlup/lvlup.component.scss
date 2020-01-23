@@ -1,7 +1,6 @@
 @import '../styles/custom.scss';
 
 .mdc-button--dense {
-    color: $color-muted;
     // background-color: $color-dark;
     min-width: 20px;
     margin: 0;
@@ -16,27 +15,6 @@
 input, select {
     // background-color: $color-primary;
     text-align: center;
-}
-
-
-[mdcSelect] {
-    [mdcSelectControl] {
-        color: $color-primary;
-        // background-color: rgba($color-dark, 0.5);
-    }
-    label {
-        color: $color-primary;
-        // background-color: $color-black;
-    }
-}
-
-[mdcTextField] {
-    input {
-        color: $color-primary;
-    }
-    label {
-        color: $color-primary;
-    }
 }
 
 [mdcCard] {
@@ -65,7 +43,6 @@ input, select {
 }
 
 .btnCalc {
-    color: $color-primary;
     margin: 1em 0 0 0;
     width: 50%;
 }
