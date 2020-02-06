@@ -21,7 +21,6 @@ jobs:
       - name: Fetch data version
         run: |
           curl -sL https://api.github.com/repos/Kengxxiao/ArknightsGameData/commits |grep -m1 "CN UPDATE" > version/data
-          if 
       - name: npm install, build, and deploy
         run: |
           if [[`git status --porcelain`]]; then

@@ -10,592 +10,40 @@ import { Content } from '@angular/compiler/src/render3/r3_ast';
     styleUrls: ['./auto-detect-hash.component.scss']
 })
 export class AutoDetectHashComponent implements OnInit {
-    // tslint:disable: max-line-length
-
-    detectedItemList = [];
-    ItemHashList = [];
+    // tslint:disable: all
     ImageElement: HTMLImageElement;
     ImageLoaded: boolean;
     Canvas: HTMLCanvasElement;
     Ctx: CanvasRenderingContext2D;
     ImageData: ImageData;
-    InfoText = '等待处理';
-    progress = 0;
+    worker: Worker;
+    InfoText: '等待处理';
+    progress: 0;
     XBound = [];
     YBound = [];
-    ItemGreyData = [];
-    ItemHash = [];
-    ImageGreyData = {};
-    ButtonLock = false;
-    ItemImage = '';
-    ModifyingItem = null;
-    ModifyBuffer = { name: '', have: 0, delete: false };
-    Modifying = { x: 0, y: 0 };
-    NumberData = [];
-    FixingNumberData = [];
-    FixingNumberIndex = 0;
-    textColor = '#00ff00';
-    NumberHash = {
-        1: '0000100000001000000010000000100000001000000010000000100000000001',
-        2: '0010011110000001000000010000000100000011000001000001100000100000',
-        3: '0010001100000001000000010000011000000011000000000000000100100011',
-        4: '0000001000001010000110100011001001000010000000110000001000000010',
-        5: '0010000101100000011000000011001100000000000000000000000101100011',
-        6: '0000001101100000010000001100011111100001110000000110000100110011',
-        7: '0000000000000001000000110000010000000100000010000000100000001000',
-        8: '0001001101100000011000000011101101100001110000000100000000010001',
-        9: '0010001111000001100000011100000000001101000000010000000101000111',
-        0: '0011001101100001110000011100000011000000110000010110000100110111',
-        万: '0000100000010000000100000001000100100001001000010110000111000001'
-    };
-    HighQNumberHash = {};
-    MaxFontSize = true;
+    ItemImages = [];
+    ItemImage:any;
+    NumberImages = [];
+    textColor: any;
+    MaxFontSize: any;
     FontSize = 0;
+    ModifyingItem = null;
+    ModifyBuffer:any = { have: 0, delete: false };
+    Modifying = { x: 0, y: 0 };
+    ItemNames = { "2001": "基础作战记录", "2002": "初级作战记录", "2003": "中级作战记录", "2004": "高级作战记录", "3003": "赤金", "3105": "龙骨", "3112": "碳", "3113": "碳素", "3114": "碳素组", "3131": "基础加固建材", "3132": "进阶加固建材", "3133": "高级加固建材", "3141": "源石碎片", "3211": "先锋芯片", "3212": "先锋芯片组", "3213": "先锋双芯片", "3221": "近卫芯片", "3222": "近卫芯片组", "3223": "近卫双芯片", "3231": "重装芯片", "3232": "重装芯片组", "3233": "重装双芯片", "3241": "狙击芯片", "3242": "狙击芯片组", "3243": "狙击双芯片", "3251": "术师芯片", "3252": "术师芯片组", "3253": "术师双芯片", "3261": "医疗芯片", "3262": "医疗芯片组", "3263": "医疗双芯片", "3271": "辅助芯片", "3272": "辅助芯片组", "3273": "辅助双芯片", "3281": "特种芯片", "3282": "特种芯片组", "3283": "特种双芯片", "3301": "技巧概要·卷1", "3302": "技巧概要·卷2", "3303": "技巧概要·卷3", "3401": "家具零件", "4001": "龙门币", "4002": "至纯源石", "4003": "合成玉", "4004": "高级凭证", "4005": "资质凭证", "4006": "采购凭证", "5001": "声望", "6001": "演习券", "7001": "招聘许可", "7002": "加急许可", "7003": "寻访凭证", "7004": "十连寻访凭证", "30011": "源岩", "30012": "固源岩", "30013": "固源岩组", "30014": "提纯源岩", "30021": "代糖", "30022": "糖", "30023": "糖组", "30024": "糖聚块", "30031": "酯原料", "30032": "聚酸酯", "30033": "聚酸酯组", "30034": "聚酸酯块", "30041": "异铁碎片", "30042": "异铁", "30043": "异铁组", "30044": "异铁块", "30051": "双酮", "30052": "酮凝集", "30053": "酮凝集组", "30054": "酮阵列", "30061": "破损装置", "30062": "装置", "30063": "全新装置", "30064": "改量装置", "30073": "扭转醇", "30074": "白马醇", "30083": "轻锰矿", "30084": "三水锰矿", "30093": "研磨石", "30094": "五水研磨石", "30103": "RMA70-12", "30104": "RMA70-24", "30115": "聚合剂", "30125": "双极纳米片", "30135": "D32钢", "31013": "凝胶", "31014": "聚合凝胶", "31023": "炽合金", "31024": "炽合金块", "32001": "芯片助剂", "SOCIAL_PT": "信用", "AP_GAMEPLAY": "理智", "base_ap": "无人机", "tier1_pioneer": "先锋信物复制品", "tier1_guard": "近卫信物复制品", "tier1_sniper": "狙击信物复制品", "tier1_tank": "重装信物复制品", "tier1_medic": "医疗信物复制品", "tier1_supporter": "辅助信物复制品", "tier1_caster": "术师信物复制品", "tier1_special": "特种信物复制品", "tier2_pioneer": "先锋信物原件", "tier2_guard": "近卫信物原件", "tier2_sniper": "狙击信物原件", "tier2_tank": "重装信物原件", "tier2_medic": "医疗信物原件", "tier2_supporter": "辅助信物原件", "tier2_caster": "术师信物原件", "tier2_special": "特种信物原件", "tier3_pioneer": "先锋信物藏品", "tier3_guard": "近卫信物藏品", "tier3_sniper": "狙击信物藏品", "tier3_tank": "重装信物藏品", "tier3_medic": "医疗信物藏品", "tier3_supporter": "辅助信物藏品", "tier3_caster": "术师信物藏品", "tier3_special": "特种信物藏品", "tier4_pioneer": "先锋传承信物", "tier4_guard": "近卫传承信物", "tier4_sniper": "狙击传承信物", "tier4_tank": "重装传承信物", "tier4_medic": "医疗传承信物", "tier4_supporter": "辅助传承信物", "tier4_caster": "术师传承信物", "tier4_special": "特种传承信物", "tier5_pioneer": "先锋遗产信物", "tier5_guard": "近卫遗产信物", "tier5_sniper": "狙击遗产信物", "tier5_tank": "重装遗产信物", "tier5_medic": "医疗遗产信物", "tier5_supporter": "辅助遗产信物", "tier5_caster": "术师遗产信物", "tier5_special": "特种遗产信物", "tier6_pioneer": "先锋皇家信物", "tier6_guard": "近卫皇家信物", "tier6_sniper": "狙击皇家信物", "tier6_tank": "重装皇家信物", "tier6_medic": "医疗皇家信物", "tier6_supporter": "辅助皇家信物", "tier6_caster": "术师皇家信物", "tier6_special": "特种皇家信物", "p_char_285_medic2": "Lancet-2的信物", "p_char_286_cast3": "Castle-3的信物", "p_char_502_nblade": "夜刀的信物", "p_char_500_noirc": "黑角的信物", "p_char_503_rang": "巡林者的信物", "p_char_501_durin": "杜林的信物", "p_char_009_12fce": "12F的信物", "p_char_123_fang": "芬的信物", "p_char_240_wyvern": "香草的信物", "p_char_192_falco": "翎羽的信物", "p_char_208_melan": "玫兰莎的信物", "p_char_209_ardign": "卡缇的信物", "p_char_122_beagle": "米格鲁的信物", "p_char_124_kroos": "克洛丝的信物", "p_char_211_adnach": "安德切尔的信物", "p_char_121_lava": "炎熔的信物", "p_char_120_hibisc": "芙蓉的信物", "p_char_212_ansel": "安赛尔的信物", "p_char_210_stward": "史都华德的信物", "p_char_278_orchid": "梓兰的信物", "p_char_282_catap": "空爆的信物", "p_char_283_midn": "月见夜的信物", "p_char_284_spot": "斑点的信物", "p_char_281_popka": "泡普卡的信物", "p_char_141_nights": "夜烟的信物", "p_char_109_fmout": "远山的信物", "p_char_235_jesica": "杰西卡的信物", "p_char_126_shotst": "流星的信物", "p_char_118_yuki": "白雪的信物", "p_char_198_blackd": "讯使的信物", "p_char_149_scave": "清道夫的信物", "p_char_290_vigna": "红豆的信物", "p_char_130_doberm": "杜宾的信物", "p_char_289_gyuki": "缠丸的信物", "p_char_193_frostl": "霜叶的信物", "p_char_127_estell": "艾丝黛尔的信物", "p_char_185_frncat": "慕斯的信物", "p_char_237_gravel": "砾的信物", "p_char_236_rope": "暗索的信物", "p_char_117_myrrh": "末药的信物", "p_char_187_ccheal": "嘉维尔的信物", "p_char_181_flower": "调香师的信物", "p_char_199_yak": "角峰的信物", "p_char_150_snakek": "蛇屠箱的信物", "p_char_196_sunbr": "古米的信物", "p_char_110_deepcl": "深海色的信物", "p_char_183_skgoat": "地灵的信物", "p_char_277_sqrrel": "阿消的信物", "p_char_137_brownb": "猎蜂的信物", "p_char_253_greyy": "格雷伊的信物", "p_char_151_myrtle": "桃金娘的信物", "p_char_298_susuro": "苏苏洛的信物", "p_char_260_durnar": "坚雷的信物", "p_char_355_ethan": "伊桑的信物", "p_char_190_clour": "红云的信物", "p_char_133_mm": "梅的信物", "p_char_302_glaze": "安比尔的信物", "p_char_128_plosis": "白面鸮的信物", "p_char_115_headbr": "凛冬的信物", "p_char_102_texas": "德克萨斯的信物", "p_char_106_franka": "芙兰卡的信物", "p_char_155_tiger": "因陀罗的信物", "p_char_140_whitew": "拉普兰德的信物", "p_char_143_ghost": "幽灵鲨的信物", "p_char_129_bluep": "蓝毒的信物", "p_char_204_platnm": "白金的信物", "p_char_219_meteo": "陨星的信物", "p_char_002_amiya": "阿米娅的信物", "p_char_166_skfire": "天火的信物", "p_char_242_otter": "梅尔的信物", "p_char_108_silent": "赫默的信物", "p_char_171_bldsk": "华法琳的信物", "p_char_148_nearl": "临光的信物", "p_char_144_red": "红的信物", "p_char_107_liskam": "雷蛇的信物", "p_char_201_moeshd": "可颂的信物", "p_char_163_hpsts": "火神的信物", "p_char_145_prove": "普罗旺斯的信物", "p_char_158_milu": "守林人的信物", "p_char_173_slchan": "崖心的信物", "p_char_174_slbell": "初雪的信物", "p_char_195_glassb": "真理的信物", "p_char_101_sora": "空的信物", "p_char_215_mantic": "狮蝎的信物", "p_char_241_panda": "食铁兽的信物", "p_char_220_grani": "格拉尼的信物", "p_char_164_nightm": "夜魔的信物", "p_char_308_swire": "诗怀雅的信物", "p_char_274_astesi": "星极的信物", "p_char_348_ceylon": "锡兰的信物", "p_char_326_glacus": "格劳克斯的信物", "p_char_275_breeze": "微风的信物", "p_char_131_flameb": "炎客的信物", "p_char_279_excu": "送葬人的信物", "p_char_261_sddrag": "苇草的信物", "p_char_356_broca": "布洛卡的信物", "p_char_243_waaifu": "槐琥的信物", "p_char_325_bison": "拜松的信物", "p_char_367_swllow": "灰喉的信物", "p_char_226_hmau": "吽的信物", "p_char_383_snsant": "雪雉的信物", "p_char_103_angel": "能天使的信物", "p_char_112_siege": "推进之王的信物", "p_char_134_ifrit": "伊芙利特的信物", "p_char_180_amgoat": "艾雅法拉的信物", "p_char_291_aglina": "安洁莉娜的信物", "p_char_147_shining": "闪灵的信物", "p_char_179_cgbird": "夜莺的信物", "p_char_136_hsguma": "星熊的信物", "p_char_202_demkni": "塞雷娅的信物", "p_char_172_svrash": "银灰的信物", "p_char_263_skadi": "斯卡蒂的信物", "p_char_010_chen": "陈的信物", "p_char_340_shwaz": "黑的信物", "p_char_188_helage": "赫拉格的信物", "p_char_248_mgllan": "麦哲伦的信物", "p_char_213_mostma": "莫斯提马的信物", "p_char_225_haak": "阿的信物", "p_char_2014_nian": "年的信物", "p_char_017_huang": "煌的信物", "bilibili001": "预约干员随机4选1", "ap_item_amiya": "阿米娅的烧烤味饼干", "ap_item_chen": "陈的烧烤味饼干", "ap_item_texas": "德克萨斯的烧烤味饼干", "ap_item_doberm": "杜宾的烧烤味饼干", "ap_item_jesica": "杰西卡的烧烤味饼干", "ap_item_cast3": "Castle-3的烧烤味饼干", "ap_item_closure": "可露希尔的烧烤味饼干", "ap_item_catap": "空爆的烧烤味饼干", "ap_item_blackd": "讯使的烧烤味饼干", "ap_item_slchan": "崖心的烧烤味饼干", "ap_item_SEC_60": "咸蛋黄味巧克力", "ap_item_CaH_200": "双人汉堡餐", "1stact": "赏金猎人金币", "ap_supply_lt_010": "应急理智小样", "ap_supply_lt_60": "应急理智合剂", "ap_supply_lt_100": "应急理智顶液", "renamingCard": "ID信息更新卡", "token_Wristband": "黑曜石节手环", "et_ObsidianPass": "黑曜石节门票", "token_Obsidian": "汐斯塔的黑曜石", "token_ObsidianCoin": "黑曜石节抽奖代币", "clue_Heavymetal_1": "重金属动态1", "clue_Heavymetal_2": "重金属动态2", "clue_Heavymetal_3": "重金属动态3", "clue_Heavymetal_4": "重金属动态4", "clue_Heavymetal_5": "重金属动态5", "clue_EDM_1": "电音动态1", "clue_EDM_2": "电音动态2", "clue_EDM_3": "电音动态3", "clue_EDM_4": "电音动态4", "clue_EDM_5": "电音动态5", "clue_Rap_1": "说唱动态1", "clue_Rap_2": "说唱动态2", "clue_Rap_3": "说唱动态3", "clue_Rap_4": "说唱动态4", "clue_Rap_5": "说唱动态5", "act4d0_intelligencepoint": "有效情报值", "act4d5_point_kfc": "KFC积分", "act5d0_point_medal": "终极企鹅勋章", "act5d1_point_conbounty": "合约赏金", "act5d1_point_opagrt": "行动协议", "act6d5_point_firecracker": "量子二踢脚", "act6d8_point_token": "元宵通宝", "voucher_item_4pick1": "干员兑换券", "voucher_recruitR3_1": "公开招募★3兑换券·I", "voucher_recruitR4_1": "公开招募★4兑换券·I", "2020recruitment10_1": "α类新年寻访凭证", "2020recruitment10_2": "β类新年寻访凭证", "2020recruitment10_3": "γ类新年寻访凭证", "randomMaterial_1": "罗德岛物资补给", "randomMaterial_2": "岁过华灯", "randomDiamondShd_1": "罗德岛迎春红包" }
+    detectedItemList=[];
+    Lock=false;
     constructor(private fetchService: FetchService, private snackbar: MdcSnackbarService, private router: Router, private el: ElementRef) {
     }
 
     async ngOnInit() {
-
-        const SaveHash = this.fetchService.getLocalStorage('detect-hash', false);
-        if (SaveHash === false) {
-            this.fetchService.getJson('./assets/data/MaterialHash.json').subscribe(data => {
-                this.ItemHashList = data;
-                this.fetchService.setLocalStorage('detect-hash', {
-                    NumberHash: this.NumberHash,
-                    ItemHash: data
-                });
-            });
-        } else {
-            this.ItemHashList = SaveHash.ItemHash;
-            this.NumberHash = SaveHash.NumberHash;
-        }
-        this.MaxFontSize = this.fetchService.getLocalStorage('detect-mfs', true);
-        this.textColor = this.fetchService.getLocalStorage('detect-tclr', '#00ff00');
         this.ImageElement = document.createElement('img');
         this.Canvas = this.el.nativeElement.getElementsByTagName('canvas')[0];
-        this.Ctx = this.Canvas.getContext('2d');
+        this.Ctx = this.Canvas.getContext('2d');   
+        this.MaxFontSize = this.fetchService.getLocalStorage('detect-mfs', true);
+        this.textColor = this.fetchService.getLocalStorage('detect-tclr', '#00ff00');
         this.onPasteImage();
-    }
-    choiceImage(event) {
-        const ImageContainer = event.target;
-        const Reader = new FileReader();
-        Reader.onload = e => {
-            this.LoadImage(Reader.result.toString());
-        };
-        Reader.readAsDataURL(ImageContainer.files[0]);
-        this.XBound = [];
-        this.YBound = [];
-        this.ItemGreyData = [];
-        this.detectedItemList = [];
-        this.ItemHash = [];
-    }
-    onPasteImage() {
-        const ctx = this;
-        document.addEventListener("paste", function (event) {
-            const items = event.clipboardData && event.clipboardData.items;
-            if (items && items.length) {
-                if (items[0].type.indexOf("image") !== -1) {
-                    const file = items[0].getAsFile();
-                    const Reader = new FileReader();
-                    Reader.onload = e => {
-                        ctx.LoadImage(Reader.result.toString());
-                    };
-                    Reader.readAsDataURL(file);
-                    ctx.XBound = [];
-                    ctx.YBound = [];
-                    ctx.ItemGreyData = [];
-                    ctx.detectedItemList = [];
-                    ctx.ItemHash = [];
-                }
-            }
-        });
-    }
-    LoadImage(src: string) {
-        this.ImageElement.src = src;
-        this.ImageElement.onload = () => {
-            this.setProgress('等待处理', 0);
-            const img = this.ImageElement;
-            this.Canvas.width = this.ImageElement.width;
-            this.Canvas.height = this.ImageElement.height;
-            const maxSize = 1200;
-            /*const width = img.width > img.height ? maxSize : (maxSize * img.width / img.height);
-            const height = img.width > img.height ? (maxSize * img.height / img.width) : maxSize;
-            this.Canvas.style.width = width + 'px';
-            this.Canvas.style.height = height + 'px';*/
-            this.ImageLoaded = true;
-            this.Ctx.drawImage(img, 0, 0);
-            // this.Ctx.font = img.height / 750 * 15 + 'px serif';
-            this.Ctx.textAlign = 'center';
-            this.ImageData = this.Ctx.getImageData(0, 0, this.Canvas.width, this.Canvas.height);
-        };
-    }
-    objectRegonition() {
-        this.XBound = [];
-        this.YBound = [];
-        this.ItemGreyData = [];
-        this.detectedItemList = [];
-        this.ItemHash = [];
-        this.setProgress('正在扫描图片', 0.1);
-        this.ButtonLock = true;
-        this.searchBoundary().then(() => {
-            return this.CropImage();
-        }).then(() => {
-            return this.genHash();
-        }).then(() => {
-            return this.checkHash();
-        }).then(() => {
-            return this.Ocr();
-        }).then(() => {
-            return this.drawText();
-        }).then(() => {
-            this.setProgress('识别完成，可点击图像对应位置对识别结果进行修改', 1);
-            this.ButtonLock = false;
-        });
-    }
-    Ocr() {
-        return new Promise((resolve, reject) => {
-            // 十分简易的文字识别
-            this.setProgress('正在识别各物品数量', 0.90);
-            setTimeout(() => {
-                // 惯例两for遍历
-                for (let y = 0, YAll = this.detectedItemList.length; y < YAll; y++) {
-                    this.NumberData.push([]);
-                    const YDistance = this.YBound[y][1] - this.YBound[y][0];
-                    const top = Math.floor(YDistance * 0.735) + y;
-                    const bottom = Math.floor(YDistance * 0.0725);
-                    const height = YDistance - bottom - top;
-                    const realTop = this.YBound[y][0] + top;
-                    for (let x = 0, XAll = this.detectedItemList[y].length; x < XAll; x++) {
-                        this.NumberData[y].push([]);
-                        const XDistance = this.XBound[x][1] - this.XBound[x][0];
-                        const width = Math.floor(XDistance * 0.485);
-                        const realLeft = Math.floor(this.XBound[x][0] + (XDistance * 0.4));
-                        // 1.裁剪出数字的地方
-                        const NumberBuffer = document.createElement('canvas').getContext('2d');
-                        NumberBuffer.canvas.height = height;
-                        NumberBuffer.canvas.width = width;
-                        NumberBuffer.drawImage(this.ImageElement, realLeft, realTop, width, height, 0, 0, width, height);
-                        const rImgData = NumberBuffer.getImageData(0, 0, width, height);
-                        const ImgData = rImgData.data;
-                        // 2.图像预处理，只保留出两种状态
-                        const easyData = [];
-                        for (let ny = 0; ny < height; ny++) {
-                            easyData.push([]);
-                            const BaseY = (ny * width) * 4;
-                            for (let nx = 0; nx < width; nx++) {
-                                if (255 - Math.floor((ImgData[BaseY + nx * 4] + ImgData[BaseY + nx * 4 + 1] + ImgData[BaseY + nx * 4 + 2]) / 3) <= 80) {
-                                    ImgData[BaseY + nx * 4] = 255;
-                                    ImgData[BaseY + nx * 4 + 1] = 255;
-                                    ImgData[BaseY + nx * 4 + 2] = 255;
-                                    easyData[ny][nx] = true;
-                                } else {
-                                    ImgData[BaseY + nx * 4] = 0;
-                                    ImgData[BaseY + nx * 4 + 1] = 0;
-                                    ImgData[BaseY + nx * 4 + 2] = 0;
-                                    easyData[ny][nx] = false;
-                                }
-                            }
-                        }
-                        // 3. 分割每个数字，方便计算Hash
-                        const XNumberBound = [];
-                        const YNumberBound = [];
-                        this.Ctx.fillStyle = '#00ff00';
-                        for (let nx = 0, whiteLock = false, i: number; nx < width; nx++) {
-                            let white = 0;
-                            for (let ny = 0; ny < height; ny++) {
-                                if (easyData[ny][nx]) { white++; }
-                            }
-                            if (white && !whiteLock) {
-                                i = XNumberBound.push([]) - 1;
-                                XNumberBound[i][0] = nx;
-                                this.Ctx.fillRect(realLeft + nx, realTop, 1, height);
-
-                                whiteLock = true;
-                            } else if (whiteLock && white === 0) {
-                                XNumberBound[i][1] = nx;
-                                this.Ctx.fillRect(realLeft + nx, realTop, 1, height);
-                                whiteLock = false;
-                            }
-                        }
-
-                        for (let index = 0, all = XNumberBound.length; index < all; index++) {
-                            for (let ny = 0, whiteLock = false; ny < height; ny++) {
-                                let white = 0;
-                                for (let nx = XNumberBound[index][0]; nx <= XNumberBound[index][1]; nx++) {
-                                    if (easyData[ny][nx]) { white++; }
-                                }
-                                if (white && !whiteLock) {
-                                    YNumberBound[index] = [];
-                                    YNumberBound[index][0] = ny;
-                                    this.Ctx.fillRect(realLeft + XNumberBound[index][0], realTop + ny, XNumberBound[index][1] - XNumberBound[index][0], 1);
-                                    whiteLock = true;
-                                } else if (whiteLock && white === 0) {
-                                    YNumberBound[index][1] = ny;
-                                    this.Ctx.fillRect(realLeft + XNumberBound[index][0], realTop + ny, XNumberBound[index][1] - XNumberBound[index][0], 1);
-                                    whiteLock = false;
-                                }
-                            }
-                        }
-                        this.Ctx.fillStyle = '#ff0000';
-                        let NumberString = '';
-                        NumberBuffer.putImageData(rImgData, 0, 0);
-                        for (let i = 0, all = XNumberBound.length; i < all; i++) {
-                            if (XNumberBound[i].length !== 2) { continue; }
-                            if (XNumberBound[i][1] - XNumberBound[i][0] >= 1 && XNumberBound[i][1] - XNumberBound[i][0] <= 3) {
-                                NumberString = NumberString.replace(/\./g, '') + '.';
-                                continue;
-                            }
-                            if (XNumberBound[i][1] - XNumberBound[i][0] < 6 || XNumberBound[i][1] - XNumberBound[i][0] >= 24) { continue; }
-                            this.Ctx.fillRect(realLeft + XNumberBound[i][0], realTop, 1, height);
-                            this.Ctx.fillRect(realLeft + XNumberBound[i][1], realTop, 1, height);
-                            let hash = '';
-                            const SingleNumber = document.createElement('canvas').getContext('2d');
-                            SingleNumber.canvas.width = 9;
-                            SingleNumber.canvas.height = 8;
-                            // 数值范围显示:this.Ctx.fillRect(realLeft + XNumberBound[i][0], realTop+YNumberBound[i][0], XNumberBound[i][1] - XNumberBound[i][0], YNumberBound[i][1] - YNumberBound[i][0]);
-                            SingleNumber.drawImage(NumberBuffer.canvas, XNumberBound[i][0], YNumberBound[i][0], XNumberBound[i][1] - XNumberBound[i][0], YNumberBound[i][1] - YNumberBound[i][0], 0, 0, SingleNumber.canvas.width, SingleNumber.canvas.height);
-                            const SingleNumberData = SingleNumber.getImageData(0, 0, SingleNumber.canvas.width, SingleNumber.canvas.height).data;
-                            for (let j = 0, dataAll = SingleNumberData.length; j < dataAll; j += 4) {
-                                if (Math.floor(j / 4) % SingleNumber.canvas.width === (SingleNumber.canvas.width - 1)) { continue; }
-                                hash += (Math.floor((SingleNumberData[j] + SingleNumberData[j + 1] + SingleNumberData[j + 2]) / 3) > Math.floor((SingleNumberData[j + 4] + SingleNumberData[j + 5] + SingleNumberData[j + 6]) / 3)) ? '1' : '0';
-                            }
-                            let Q = Infinity;
-                            let Value = '';
-                            for (const key of Object.keys(this.NumberHash)) {
-                                const distance = this.NumberHash[key].split('').reduce((count, value, index) => {
-                                    return count + (value === hash[index] ? 0 : 1);
-                                }, 0);
-                                /*const LD = this.LD(hash, this.NumberHash[key]);
-                                const LCS = this.LCS(hash, this.NumberHash[key]);
-                                const S = (1 - (LCS / (LD + LCS))) * 100;*/
-                                Q = Math.min(Q, distance);
-                                if (Q === distance) {
-                                    Value = key;
-                                }
-                            }
-                            NumberString += Q > 15 ? '' : Value; // 去噪声
-                            const TempCanvas = document.createElement('canvas').getContext('2d');
-                            TempCanvas.canvas.width = XNumberBound[i][1] - XNumberBound[i][0];
-                            TempCanvas.canvas.height = YNumberBound[i][1] - YNumberBound[i][0];
-                            TempCanvas.drawImage(this.ImageElement, realLeft + XNumberBound[i][0], realTop + YNumberBound[i][0], TempCanvas.canvas.width, TempCanvas.canvas.height, 0, 0, TempCanvas.canvas.width, TempCanvas.canvas.height);
-                            this.NumberData[y][x].push({ hash, src: TempCanvas.canvas.toDataURL(), realData: null });
-                            TempCanvas.canvas.remove();
-                            SingleNumber.canvas.remove();
-                        }
-                        if (NumberString.indexOf('.') === -1 || /万\d+/.test(NumberString)) {
-                            NumberString = NumberString.replace(/万/g, '');
-                        }
-                        if (NumberString[0] === '.') {
-                            NumberString = NumberString.substr(1, NumberString.length - 1);
-                        }
-                        // this.Ctx.fillText(NumberString, Math.floor(this.XBound[x][0] + (this.XBound[x][1] - this.XBound[x][0]) / 2), Math.floor(this.YBound[y][0] + (this.YBound[y][1] - this.YBound[y][0]) / 2 + this.ImageElement.height / 750 * 15));
-                        if (NumberString.substr(NumberString.length - 1, 1) === '万') {
-                            this.detectedItemList[y][x].have = Number(NumberString.substr(0, NumberString.length - 1)) * 10000;
-                        } else {
-                            this.detectedItemList[y][x].have = Number(NumberString);
-                        }
-                        NumberBuffer.canvas.remove();
-                        /* 直接对比汉明距离在这里不太好用，使用编辑距离来进行比较
-                        // 实际测试中发现对不同设备的兼容性不够良好
-                        for (let ny = 0; ny < height; ny++) {
-                            for (let nx = XNumberBound[i][0]; nx <= XNumberBound[i][1]; nx++) {
-                                hash += easyData[ny][nx] ? '1' : '0';
-                            }
-                        }
-                        let min = Infinity;
-                        let Value: string;
-                        for (const key of Object.keys(this.NumberHash)) {
-                            const ld = this.LD((hash.length < this.NumberHash[key]) ? hash.padEnd(this.NumberHash[key].length, '0') : hash, (hash.length < this.NumberHash[key]) ? this.NumberHash[key] : this.NumberHash[key].padEnd(hash.length, '0'));
-                            min = Math.min(min, ld);
-                            if (ld === min) {
-                                Value = key;
-                            }
-                        }
-                        NumberString += (min > 100) ? '' : Value;
-                    }
-                    if (NumberString.indexOf('.') === -1) {
-                        NumberString.replace(/万/g, '');
-                    }
-                    this.Ctx.fillStyle = '#00ff00';
-                    this.Ctx.fillText(NumberString, Math.floor(this.XBound[x][0] + (this.XBound[x][1] - this.XBound[x][0]) / 2), Math.floor(this.YBound[y][0] + (this.YBound[y][1] - this.YBound[y][0]) / 2 + 20));
-                    if (NumberString.substr(NumberString.length - 1, 1) === '万') {
-                        this.detectedItemList[y][x].have = Number(NumberString.substr(0, NumberString.length - 1)) * 10000;
-                    } else {
-                        this.detectedItemList[y][x].have = Number(NumberString);
-                    }
-                    */
-                        // //console.log(easyData);
-                        // //console.log(XNumberBound);
-                    }
-                }
-                resolve();
-            }, 25);
-        });
-    }
-    /*
-    LD(str1: string, str2: string) {
-        // 实现LD算法计算编辑距离 可以优化成LDCompare(https://www.cnblogs.com/grenet/archive/2009/12/17/1626649.html#comment_body_1727150)?
-        // 代码参考https://www.cnblogs.com/grenet/archive/2010/06/01/1748448.html
-        const L = [];
-        L[0] = [];
-        L[0][0] = 0;
-        for (let i = 1, all = str1.length; i <= all; i++) {
-            L[i] = [];
-            L[i][0] = i;
-        }
-        for (let j = 1, all = str2.length; j <= all; j++) {
-            L[0][j] = j;
-        }
-        for (let i = 1, all = str1.length; i <= all; i++) {
-            for (let j = 1, all2 = str2.length; j <= all2; j++) {
-                if (str1[i - 1] === str2[j - 1]) {
-                    L[i][j] = L[i - 1][j - 1];
-                } else {
-                    L[i][j] = Math.min(L[i - 1][j - 1], L[i - 1][j], L[i][j - 1]) + 1;
-                }
-            }
-        }
-        return L[str1.length][str2.length];
-    }
-    LCS(str1: string, str2: string) {
-        const L = [];
-        L[0] = [];
-        L[0][0] = 0;
-        for (let i = 1, all = str1.length; i <= all; i++) {
-            L[i] = [];
-            L[i][0] = 0;
-        }
-        for (let j = 1, all = str2.length; j <= all; j++) {
-            L[0][j] = 0;
-        }
-        for (let i = 1, all = str1.length; i <= all; i++) {
-            for (let j = 1, all2 = str2.length; j <= all2; j++) {
-                if (str1[i - 1] === str2[j - 1]) {
-                    L[i][j] = L[i - 1][j - 1] + 1;
-                } else {
-                    L[i][j] = Math.max(L[i - 1][j - 1], L[i - 1][j], L[i][j - 1]);
-                }
-            }
-        }
-        return L[str1.length][str2.length];
-    }*/
-    CropImage() {
-        // 裁剪图片
-        return new Promise((resolve, reject) => {
-            this.setProgress('正在裁剪并缩放各物品图片', 0.55);
-            setTimeout(() => {
-                const TempCanvas = document.createElement('canvas');
-                TempCanvas.width = 9;
-                TempCanvas.height = 8;
-                const TempCtx = TempCanvas.getContext('2d');
-                for (let y = 0, YAll = this.YBound.length; y < YAll; y++) {
-                    if (this.YBound[y].length !== 2) { continue; }
-                    this.ItemGreyData.push([]);
-                    for (let x = 0, XAll = this.XBound.length; x < XAll; x++) {
-                        if (this.XBound[x].length !== 2) { continue; }
-                        TempCtx.drawImage(this.ImageElement, this.XBound[x][0], this.YBound[y][0], this.XBound[x][1] - this.XBound[x][0], this.YBound[y][1] - this.YBound[y][0], 0, 0, TempCanvas.width, TempCanvas.height);
-                        const TempImageData = TempCtx.getImageData(0, 0, TempCanvas.width, TempCanvas.height).data;
-                        const l = this.ItemGreyData[y].push([]) - 1;
-                        for (let ya = 0; ya < TempCanvas.height; ya++) {
-                            this.ItemGreyData[y][l].push([]);
-                            for (let xa = 0; xa < TempCanvas.width; xa++) {
-                                const index = (ya * TempCanvas.width + xa) * 4;
-                                this.ItemGreyData[y][l][ya][xa] = Math.floor((TempImageData[index] + TempImageData[index + 1] + TempImageData[index + 2]) / 3);
-                            }
-                        }
-                    }
-                }
-                TempCanvas.remove();
-                resolve();
-            }, 25);
-        });
-    }
-    genHash() {
-        return new Promise((resolve, reject) => {
-            this.setProgress('正在计算Hash(请耐心等待)', 0.65);
-            setTimeout(() => {
-                for (let ya = 0, YaAll = this.ItemGreyData.length; ya < YaAll; ya++) {
-                    this.ItemHash.push([]);
-                    for (let xa = 0, XaAll = this.ItemGreyData[ya].length; xa < XaAll; xa++) {
-                        let hash = '';
-                        for (let yb = 0, YbAll = this.ItemGreyData[ya][xa].length; yb < YbAll; yb++) {
-                            for (let xb = 0, XbAll = this.ItemGreyData[ya][xa][yb].length; xb < XbAll - 1; xb++) {
-                                hash += (this.ItemGreyData[ya][xa][yb][xb] > this.ItemGreyData[ya][xa][yb][xb + 1] ? '1' : '0');
-                            }
-                        }
-                        this.ItemHash[ya][xa] = hash;
-                    }
-                }
-                resolve();
-            }, 25);
-        });
-    }
-    checkHash() {
-        // 对比Hash部分
-        return new Promise((resolve, reject) => {
-            this.setProgress('正在识别物品', 0.75);
-            setTimeout(() => {
-                for (let y = 0, YAll = this.ItemHash.length; y < YAll; y++) {
-                    this.detectedItemList.push([]);
-                    for (let x = 0, XAll = this.ItemHash[y].length; x < XAll; x++) {
-                        this.detectedItemList[y][x] = {
-                            have: 0,
-                            item: this.ItemHashList.map((item) => {
-                                if (item.hash === '') {
-                                    return { distance: 64, name: item.name, hash: item.hash };
-                                }
-                                return {
-                                    distance: this.ItemHash[y][x].split('').reduce((count, value, index) => {
-                                        return count + (value === item.hash[index] ? 0 : 1);
-                                    }, 0), name: item.name, hash: item.hash
-                                };
-                            }).sort((a, b) => a.distance - b.distance)
-                        };
-                        this.detectedItemList[y][x].name = this.detectedItemList[y][x].item[0].name;
-                        this.detectedItemList[y][x].delete = false;
-                        // this.Ctx.fillText(this.detectedItemList[y][x].item[0].name, Math.floor(this.XBound[x][0] + (this.XBound[x][1] - this.XBound[x][0]) / 2), Math.floor(this.YBound[y][0] + (this.YBound[y][1] - this.YBound[y][0]) / 2));
-                    }
-                }
-                resolve();
-            }, 25);
-        });
-    }
-    getPixelGrey(x: number, y: number) {
-        if (x < 0 || y < 0 || x > this.Canvas.width || y > this.Canvas.height) { return -1; }
-        const offset = y * 10000 + x;
-        if (typeof this.ImageGreyData[offset] !== 'undefined') {
-            return this.ImageGreyData[offset];
-        }
-        const index = (y * this.Canvas.width + x) * 4;
-        this.ImageGreyData[offset] = Math.floor((this.ImageData.data[index] + this.ImageData.data[index + 1] + this.ImageData.data[index + 2]) / 3);
-        return this.ImageGreyData[offset];
-    }
-    searchBoundary() {
-        this.setProgress('扫描图像边界', 0.2);
-        const XBlank = Array(this.Canvas.width).fill(0);
-        const YBlank = Array(this.Canvas.height).fill(0);
-        const XSpace = Array(this.Canvas.height).fill(0);
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                // //console.time("a");
-                for (let y = 100, BlackPoint = -1; y < this.Canvas.height; y++) {
-                    let LastBlank = 0;
-                    for (let x = 15; x < this.Canvas.width - 1; x++) {
-                        const GreyList = [
-                            [this.getPixelGrey(x - 1, y - 1), this.getPixelGrey(x, y - 1), this.getPixelGrey(x + 1, y - 1)],
-                            [this.getPixelGrey(x - 1, y), this.getPixelGrey(x, y), this.getPixelGrey(x + 1, y)],
-                            [this.getPixelGrey(x - 1, y - 1), this.getPixelGrey(x, y - 1), this.getPixelGrey(x + 1, y - 1)]
-                        ];
-                        if ((() => {
-                            for (let ya = 0; ya < 3; ya++) {
-                                for (let xa = 0; xa < 3; xa++) {
-                                    if (GreyList[ya][xa] === -1) {
-                                        GreyList[ya][xa] = GreyList[1][1];
-                                        continue;
-                                    }
-                                    if (ya === 1 && xa === 1) { continue; }
-                                    if (Math.abs(GreyList[ya][xa] - GreyList[1][1]) <= 10) {
-                                        return false;
-                                    }
-                                }
-                            }
-                            return true;
-                        })()) {
-                            if (LastBlank === 0) {
-                                LastBlank = x;
-                            } else {
-                                XSpace[y] += (x - LastBlank);
-                                LastBlank = x;
-                                BlackPoint++;
-                            }
-                            YBlank[y]++;
-                            XBlank[x]++;
-                        }
-                    }
-                    XSpace[y] /= BlackPoint;
-                }
-                // console.log(XSpace);
-                this.ImageGreyData = {};
-                // //console.timeEnd("a");
-                resolve();
-            }, 25);
-        }).then(() => {
-            this.setProgress('正在计算各元素Y轴方向上的边界', 0.35);
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    this.Ctx.fillStyle = '#00ff00';
-                    for (let y = 0, isObject = false, LastBlank = 0, SpaceLength, ItemHeight, length; y < this.Canvas.height; y++) {
-                        if (!isObject && YBlank[y] > (10)) {
-                            length = this.YBound.push([]);
-                            isObject = true;
-                            this.YBound[length - 1][0] = y;
-                            SpaceLength = 0;
-                            ItemHeight = 0;
-                            this.Ctx.fillRect(0, y, this.Canvas.width, 1);
-
-                        }
-                        if (isObject && ItemHeight > 100 && YBlank[y] <= (this.YBound.length < 3 ? 10 : 30)) {
-                            SpaceLength++;
-                            if (SpaceLength > 15) {
-                                SpaceLength = 0;
-                                this.YBound[length - 1][1] = LastBlank;
-                                isObject = false;
-                                this.Ctx.fillRect(0, LastBlank, this.Canvas.width, 1);
-                                // if (this.YBound.length === 3) { break; }
-                            }
-                        }
-                        if (isObject && YBlank[y] > (this.YBound.length < 3 ? 5 : 20)) {
-                            LastBlank = XSpace[y] > 0.01 ? y : LastBlank;
-                            SpaceLength = 0;
-                        }
-                        if (isObject) {
-                            ItemHeight++;
-                        }
-                    }
-                    // console.log(this.YBound);
-                    resolve();
-                }, 25);
-            });
-        }).then(() => {
-            this.setProgress('正在计算各元素X轴方向上的边界', 0.45);
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    for (let x = 0, isObject = false, LastBlank = 0, SpaceLength, ItemWidth, length; x < this.Canvas.width; x++) {
-                        if (!isObject && XBlank[x] > (this.XBound.length > 0 ? 5 : 20)) {
-                            length = this.XBound.push([]);
-                            isObject = true;
-                            this.XBound[length - 1][0] = x;
-                            SpaceLength = 0;
-                            ItemWidth = 0;
-                            this.Ctx.fillRect(x, 0, 1, this.Canvas.height);
-                        }
-                        if (isObject && ItemWidth > 100 && XBlank[x] <= 10) {
-                            SpaceLength++;
-                            if (SpaceLength > 15) {
-                                SpaceLength = 0;
-                                this.XBound[length - 1][1] = LastBlank;
-                                isObject = false;
-                                this.Ctx.fillRect(LastBlank, 0, 1, this.Canvas.height);
-                                if (this.XBound.length === 8) { break; }
-                            }
-                        }
-                        if (isObject && XBlank[x] > 5) {
-                            LastBlank = x;
-                            SpaceLength = 0;
-                        }
-                        if (isObject) {
-                            ItemWidth++;
-                        }
-                    }
-                    // //console.log(XBlank);
-                    resolve();
-                }, 25);
-            });
-        });
-    }
-    setProgress(text: string, Progress: number) {
-        this.InfoText = text;
-        this.progress = Progress;
+        this.registerWorker();
     }
     ModifyData(dialog: any, e: MouseEvent) {
         if (this.detectedItemList.length === 0) { return; }
@@ -619,12 +67,9 @@ export class AutoDetectHashComponent implements OnInit {
             }
         }
         if (typeof x === 'undefined' || typeof y === 'undefined') { return; }
-        const ItemImage = document.createElement('canvas').getContext('2d');
-        ItemImage.canvas.width = this.XBound[x][1] - this.XBound[x][0];
-        ItemImage.canvas.height = this.YBound[y][1] - this.YBound[y][0];
-        ItemImage.drawImage(this.ImageElement, this.XBound[x][0], this.YBound[y][0], this.XBound[x][1] - this.XBound[x][0], this.YBound[y][1] - this.YBound[y][0], 0, 0, ItemImage.canvas.width, ItemImage.canvas.height);
-        this.ItemImage = ItemImage.canvas.toDataURL();
+        this.ItemImage = this.ItemImages[this.XBound.length*y+x].toDataURL();
         this.ModifyingItem = this.detectedItemList[y][x];
+
         for (const key of Object.keys(this.ModifyingItem)) {
             if (typeof this.ModifyingItem[key] !== 'object') {
                 this.ModifyBuffer[key] = this.ModifyingItem[key];
@@ -638,29 +83,52 @@ export class AutoDetectHashComponent implements OnInit {
     AcceptModify() {
         const y = this.Modifying.y;
         const x = this.Modifying.x;
-        if (this.ModifyBuffer.name !== this.ModifyingItem.name) {
-            for (let i = 0, all = this.ItemHashList.length; i < all; i++) {
-                if (this.ItemHashList[i].name === this.ModifyBuffer.name) {
-                    this.ItemHashList[i].hash = this.ItemHash[y][x];
-                    break;
-                }
-            }
-            this.fetchService.setLocalStorage('detect-hash', {
-                NumberHash: this.NumberHash,
-                ItemHash: this.ItemHashList
-            });
-        }
-        if (this.ModifyBuffer.name !== this.ModifyingItem.name || this.ModifyBuffer.have !== this.ModifyingItem.have || this.ModifyBuffer.delete !== this.ModifyingItem.delete) {
+        if (this.ModifyBuffer.id !== this.ModifyingItem.id || this.ModifyBuffer.have !== this.ModifyingItem.have || this.ModifyBuffer.delete !== this.ModifyingItem.delete) {
             for (const key of Object.keys(this.ModifyBuffer)) {
                 this.ModifyingItem[key] = this.ModifyBuffer[key];
             }
             this.Ctx.drawImage(this.ImageElement, this.XBound[x][0] + 1, this.YBound[y][0] + 1, this.XBound[x][1] - this.XBound[x][0] - 1, this.YBound[y][1] - this.YBound[y][0] - 1, this.XBound[x][0] + 1, this.YBound[y][0] + 1, this.XBound[x][1] - this.XBound[x][0] - 1, this.YBound[y][1] - this.YBound[y][0] - 1);
+            console.log(1)
             this.drawText(x, y);
         }
         if (this.ModifyingItem.delete) {
             this.Ctx.drawImage(this.ImageElement, this.XBound[x][0] + 1, this.YBound[y][0] + 1, this.XBound[x][1] - this.XBound[x][0] - 1, this.YBound[y][1] - this.YBound[y][0] - 1, this.XBound[x][0] + 1, this.YBound[y][0] + 1, this.XBound[x][1] - this.XBound[x][0] - 1, this.YBound[y][1] - this.YBound[y][0] - 1);
             return;
         }
+    }
+    toggleItem() {
+        this.ModifyBuffer.delete = !this.ModifyBuffer.delete;
+    }
+    choiceImage(event) {
+        const ImageContainer = event.target;
+        const Reader = new FileReader();
+        Reader.onload = e => {
+            this.LoadImage(Reader.result.toString());
+        };
+        Reader.readAsDataURL(ImageContainer.files[0]);
+    }
+    onPasteImage() {
+        document.addEventListener('paste', event => {
+            const items = event.clipboardData && event.clipboardData.items;
+            if (items && items.length) {
+                if (items[0].type.indexOf('image') !== -1) {
+                    const file = items[0].getAsFile();
+                    const Reader = new FileReader();
+                    Reader.onload = e => {
+                        this.LoadImage(Reader.result.toString());
+                    };
+                    Reader.readAsDataURL(file);
+                }
+            }
+        });
+    }
+    NotAgreeSecondDetect(){
+        this.snackbar.show({
+            message: '请先导入材料计算在进行下一次识别(因为开发者懒得重置变量)。',
+            actionText: '好的',
+            multiline: false,
+            actionOnBottom: false
+        });
     }
     async toMaterialCalc() {
         if (!this.detectedItemList || this.detectedItemList.length === 0) {
@@ -684,71 +152,271 @@ export class AutoDetectHashComponent implements OnInit {
         }
         for (let y = 0, Yall = this.detectedItemList.length; y < Yall; y++) {
             for (let x = 0, Xall = this.detectedItemList[y].length; x < Xall; x++) {
-                if (this.detectedItemList[y][x].name in data && !isNaN(this.detectedItemList[y][x].have) && this.detectedItemList[y][x].have !== 0 && !this.detectedItemList[y][x].delete) {
-                    data[this.detectedItemList[y][x].name].have = this.detectedItemList[y][x].have;
+                if (this.ItemNames[this.detectedItemList[y][x].id] in data && !isNaN(this.detectedItemList[y][x].have) && this.detectedItemList[y][x].have !== 0 && !this.detectedItemList[y][x].delete) {
+                    data[this.ItemNames[this.detectedItemList[y][x].id]].have = this.detectedItemList[y][x].have;
                 }
             }
         }
         this.fetchService.setLocalStorage('m-data', data);
         this.router.navigateByUrl('/material');
     }
-    toggleItem() {
-        this.ModifyBuffer.delete = !this.ModifyBuffer.delete;
+    LoadImage(src: string) {
+        this.ImageElement.onload = e => {
+            this.ImageLoaded = true;
+            this.Canvas.width = this.ImageElement.width;
+            this.Canvas.height = this.ImageElement.height;
+            this.Ctx.drawImage(this.ImageElement, 0, 0);
+        };
+        this.ImageElement.src = src;
     }
-    fixNumberHash(dialog: any) {
-        this.FixingNumberData = this.NumberData[this.Modifying.y][this.Modifying.x];
-        this.FixingNumberIndex = 0;
-        dialog.open();
+    registerWorker() {
+        this.worker = new Worker('./detect.worker', { type: 'module' });
+        this.worker.onmessage = this.MessageDeal.bind(this);
     }
-    AcceptFixNumber() {
-        for (let i = 0, all = this.FixingNumberData.length; i < all; i++) {
-            if (this.FixingNumberData[i].realData !== null) {
-                this.NumberHash[this.FixingNumberData[i].realData] = this.FixingNumberData[i].hash;
-                /*if (this.FixingNumberIndex === i) {
-                    this.HighQNumberHash[this.FixingNumberData[i].realData] = this.HighQNumberHash[this.FixingNumberData[i].realData] || { hash: new Array(144).fill(0), count: 0 };
-                    this.HighQNumberHash[this.FixingNumberData[i].realData].hash = this.HighQNumberHash[this.FixingNumberData[i].realData].hash.map((item: number, index: number) => {
-                        return item + Number(this.FixingNumberData[i].hash[index]);
-                    });
-                    this.HighQNumberHash[this.FixingNumberData[i].realData].count++;
-                    console.log(this.HighQNumberHash);
-                }*/
-            }
+    objectRegonition() {
+        this.Lock=true;
+        this.worker.postMessage({ method: 'ImageDataLoad', data: this.Ctx.getImageData(0, 0, this.Canvas.width, this.Canvas.height) });
+    }
+    MessageDeal(message: MessageEvent) {
+        switch (message.data.method) {
+            case 'status':
+                this.InfoText = message.data.text;
+                this.progress = message.data.progress;
+                break;
+            case 'clipImage':
+                this.XBound = message.data.XBound;
+                this.YBound = message.data.YBound;
+                console.log(message.data);
+                const ImageDatas = [];
+                for (let y = 0; y < this.YBound.length; y++) {
+                    for (let x = 0; x < this.XBound.length; x++) {
+                        const Canvas = document.createElement('canvas');
+                        Canvas.width = this.XBound[x][1] - this.XBound[x][0];
+                        Canvas.height = this.YBound[y][1] - this.YBound[y][0];
+                        const ctx = Canvas.getContext('2d');
+                        ctx.drawImage(this.ImageElement, this.XBound[x][0], this.YBound[y][0], Canvas.width, Canvas.height, 0, 0, Canvas.width, Canvas.height);
+                        this.ItemImages.push(Canvas);
+                        const DhashCanvas = document.createElement('canvas');
+                        DhashCanvas.width = 13;
+                        DhashCanvas.height = 12;
+                        const DhashCtx = DhashCanvas.getContext('2d');
+                        DhashCtx.drawImage(Canvas, 0, 0, Canvas.width, Canvas.height, 0, 0, DhashCanvas.width, DhashCanvas.height);
+                        ImageDatas.push(DhashCtx.getImageData(0, 0, DhashCanvas.width, DhashCanvas.height));
+                        this.Ctx.strokeRect(this.XBound[x][0], this.YBound[y][0], Canvas.width, Canvas.height);
+                    }
+                }
+                this.worker.postMessage({ method: 'calcDhash', ImageDatas });
+                break;
+            case 'getNumberData':
+                const NumberTop = 0.705;
+                const NumberHeight = 0.235;
+                const NumberLeft = 0.405;
+                let SingleNumberClipImageDatas: Array<Array<ImageData>> = [];
+                for (let y = 0; y < this.YBound.length; y++) {
+                    for (let x = 0; x < this.XBound.length; x++) {
+                        const Canvas = document.createElement('canvas');
+                        Canvas.width = (this.XBound[x][1] - this.XBound[x][0]) * (1 - NumberLeft);
+                        Canvas.height = (this.YBound[y][1] - this.YBound[y][0]) * NumberHeight;
+                        const ctx = Canvas.getContext('2d');
+                        ctx.drawImage(this.ImageElement, this.XBound[x][0] + (this.XBound[x][1] - this.XBound[x][0]) * NumberLeft, this.YBound[y][0] + (this.YBound[y][1] - this.YBound[y][0]) * NumberTop, Canvas.width, Canvas.height, 0, 0, Canvas.width, Canvas.height);
+                        const allNumberImageData = ctx.getImageData(0, 0, Canvas.width, Canvas.height);
+                        const data = allNumberImageData.data;
+                        const [...backupdata] = data;
+                        const SData = [];
+                        const SameSets = {};
+                        for (let yh = 0; yh < allNumberImageData.height; yh++) {
+                            SData.push([]);
+                        }
+                        // 预处理图像
+                        for (let i = 0; i < data.length; i += 4) {
+                            const grey = (backupdata[i] + backupdata[i + 1] + backupdata[i + 2]) / 3;
+                            const xa = Math.floor(i / 4) % allNumberImageData.width, ya = Math.floor(Math.floor(i / 4) / allNumberImageData.width);
+                            if (grey >= 120) {
+                                SData[ya][xa] = 1;
+                            } else if (grey < 120 && grey > 105) {
+                                const left = (backupdata[i - 4] + backupdata[i - 3] + backupdata[i - 2]) / 3;
+                                const right = (backupdata[i + 4] + backupdata[i + 5] + backupdata[i + 6]) / 3;
+                                const TopIndex = (i + allNumberImageData.width * 4);
+                                const BottemIndex = (i + allNumberImageData.width * 4);
+                                const top = (backupdata[TopIndex] + backupdata[TopIndex + 1] + backupdata[TopIndex + 2]) / 3;
+                                const bottom = (backupdata[BottemIndex] + backupdata[BottemIndex + 1] + backupdata[BottemIndex + 2]) / 3;
+                                if ((xa !== 0 && left > 120) || (xa !== allNumberImageData.width - 1 && right > 120) || (ya !== 0 && top > 120) || (ya !== allNumberImageData.height - 1 && bottom > 120)) {
+                                    SData[ya][xa] = 1;
+                                } else {
+                                    SData[ya][xa] = 0;
+                                }
+                            } else {
+                                SData[ya][xa] = 0;
+                            }
+                        }
+                        // 二次扫描检查连通区域
+                        let Label = 0;
+                        for (let yb = 0; yb < SData.length; yb++) {
+                            for (let xb = 0; xb < SData[yb].length; xb++) {
+                                if (SData[yb][xb]) {
+                                    const NearPoints = [
+                                        (yb === 0 || xb === 0) ? 0 : SData[yb - 1][xb - 1],
+                                        (yb === 0) ? 0 : SData[yb - 1][xb],
+                                        (yb === 0 || xb === SData[yb].length - 1) ? 0 : SData[yb - 1][xb + 1],
+                                        (xb === 0) ? 0 : SData[yb][xb - 1],
+                                    ]; // 左上 上 右上 左
+                                    if (NearPoints.reduce((a, b) => a + b) === 0) {
+                                        SData[yb][xb] = ++Label;
+                                        continue;
+                                    }
+                                    const NotZeroPoints = NearPoints.filter(v => v);
+                                    if (NotZeroPoints.every((v, index, arr) => {
+                                        return index === 0 || v === arr[index - 1];
+                                    })) {
+                                        SData[yb][xb] = NotZeroPoints[0];
+                                    } else {
+                                        if (!(NotZeroPoints[0] in SameSets)) {
+                                            SameSets[NotZeroPoints[0]] = new Set();
+                                        }
+                                        if (!(NotZeroPoints[1] in SameSets)) {
+                                            SameSets[NotZeroPoints[1]] = new Set();
+                                        }
+                                        SameSets[NotZeroPoints[0]].add(NotZeroPoints[1]);
+                                        SameSets[NotZeroPoints[1]].add(NotZeroPoints[0]);
+                                        SData[yb][xb] = Math.min(...NotZeroPoints);
+                                    }
+                                }
+                            }
+                        }
+                        //  重新分配Label
+                        const NewLabel: Array<Array<number>> = [];
+                        for (let LabelIndex = 1; LabelIndex <= Label; LabelIndex++) {
+                            if (LabelIndex in SameSets) {
+                                const Sets = [...SameSets[LabelIndex]];
+                                Sets.push(LabelIndex);
+                                let LIndex: number;
+                                for (const set of Sets) {
+                                    LIndex = NewLabel.findIndex((v: Array<number>) => {
+                                        return v.includes(set);
+                                    });
+                                    if (LIndex !== -1) { break; }
+                                }
+                                if (LIndex !== -1) {
+                                    NewLabel[LIndex] = [...new Set(NewLabel[LIndex].concat(Sets))];
+                                } else {
+                                    NewLabel.push(Sets);
+                                }
+                                continue;
+                            } else {
+                                NewLabel.push([LabelIndex]);
+                            }
+                        }
+                        let Bounds: Array<Array<number>> = [];
+                        for (let i = 0; i < NewLabel.length; i++) {
+                            Bounds.push([Infinity/* 左 */, Infinity/* 上 */, -Infinity/* 右 */, -Infinity/* 下 */]);
+                        }
+                        for (let yb = 0; yb < SData.length; yb++) {
+                            for (let xb = 0; xb < SData[yb].length; xb++) {
+                                if (SData[yb][xb] !== 0) {
+                                    let Label = NewLabel.findIndex((v) => {
+                                        return v.includes(SData[yb][xb])
+                                    });
+                                    SData[yb][xb] = Label + 1;
+                                    Bounds[Label][0] = Math.min(Bounds[Label][0], xb);
+                                    Bounds[Label][1] = Math.min(Bounds[Label][1], yb);
+                                    Bounds[Label][2] = Math.max(Bounds[Label][2], xb);
+                                    Bounds[Label][3] = Math.max(Bounds[Label][3], yb);
+                                }
+                            }
+                        }
+                        let SingleNumberImageDatas = [];
+                        for (let Bound of Bounds) {
+                            let isInf = Math.abs(Bound.reduce((a, b) => {
+                                return a + b;
+                            }));
+                            if (isInf === Infinity || Bound[0] <= 2 || allNumberImageData.width - Bound[2] <= 2 || Bound[1] < 2 || allNumberImageData.height - Bound[3] <= 2) {
+                                SingleNumberImageDatas.push(false);
+                                continue;
+                            }
+                            const width = Bound[2] - Bound[0] + 1, height = Bound[3] - Bound[1] + 1
+                            if (width > height || width < 5 || height < 9) {
+                                SingleNumberImageDatas.push(false);
+                                continue;
+                            }
+                            SingleNumberImageDatas.push(new ImageData(new Uint8ClampedArray(width * height * 4).fill(255), width, height))
+                        }
+                        for (let yb = 0; yb < SData.length; yb++) {
+                            for (let xb = 0; xb < SData[yb].length; xb++) {
+                                if (SData[yb][xb] !== 0) {
+                                    if (SingleNumberImageDatas[SData[yb][xb] - 1] === false) continue;
+                                    const yc = yb - Bounds[SData[yb][xb] - 1][1], xc = xb - Bounds[SData[yb][xb] - 1][0];
+                                    let index = (yc * SingleNumberImageDatas[SData[yb][xb] - 1].width + xc) * 4
+                                    SingleNumberImageDatas[SData[yb][xb] - 1].data.fill(0, index, index + 3)
+                                }
+                            }
+                        }
+                        SingleNumberImageDatas = SingleNumberImageDatas.map((v, i) => [Bounds[i][0], v]).sort((a, b) => a[0] - b[0]).map(v => v[1]);
+                        let SingleNumberCtx: Array<CanvasRenderingContext2D> = [];
+                        let ImageIndex = SingleNumberClipImageDatas.push([]) - 1;
+                        for (let SingleNumberImageData of SingleNumberImageDatas) {
+                            if (SingleNumberImageData == false) continue;
+                            let Canvas = document.createElement("canvas");
+                            Canvas.width = SingleNumberImageData.width;
+                            Canvas.height = SingleNumberImageData.height;
+                            let Ctx = Canvas.getContext("2d");
+                            Ctx.putImageData(SingleNumberImageData, 0, 0);
+                            SingleNumberCtx.push(Ctx)
+                            let ClipCanvas = document.createElement("canvas");
+                            ClipCanvas.width = 9
+                            ClipCanvas.height = 10
+                            let ClipCtx = ClipCanvas.getContext("2d");
+                            ClipCtx.drawImage(Canvas, 0, 0, Canvas.width, Canvas.height, 0, 0, ClipCanvas.width, ClipCanvas.height);
+                            SingleNumberClipImageDatas[ImageIndex].push(ClipCtx.getImageData(0, 0, ClipCanvas.width, ClipCanvas.height));
+                        }
+                        document.body.appendChild(document.createElement("br"));
+                    }
+                }
+                this.worker.postMessage({ method: "getItemCount", ImageDatas: SingleNumberClipImageDatas });
+                break;
+            case "DetectResult":
+                for(let y=0;y<this.YBound.length;y++){
+                    this.detectedItemList.push([])
+                }
+                for (let y = 0; y < this.YBound.length; y++) {
+                    for (let x = 0; x < this.XBound.length; x++) {
+                        this.detectedItemList[y][x]={
+                            id:message.data.Items[y*this.XBound.length+x][0].id,
+                            name:this.ItemNames[message.data.Items[y*this.XBound.length+x][0].id],
+                            have:message.data.NumberResult[y*this.XBound.length+x],
+                            item:message.data.Items[y*this.XBound.length+x]
+                        };
+                    }
+                }
+                this.drawText();
+                break;
         }
-        this.fetchService.setLocalStorage('detect-hash', {
-            NumberHash: this.NumberHash,
-            ItemHash: this.ItemHashList
-        });
     }
+    
     drawText(...pos: number[]) {
         this.Ctx.fillStyle = this.textColor;
+        this.Ctx.textAlign="center";
         if (pos.length === 0) {
-            this.setProgress('正在绘制文字', 0.95);
-            return new Promise((reduce, reject) => {
-                setTimeout(() => {
-                    for (let y = 0, Yall = this.detectedItemList.length; y < Yall; y++) {
-                        for (let x = 0, Xall = this.detectedItemList[y].length; x < Xall; x++) {
-                            const width = this.XBound[x][1] - this.XBound[x][0];
-                            const height = this.YBound[y][1] - this.YBound[y][0];
-                            const NumberString = (this.detectedItemList[y][x].have / 10000 >= 1) ? Math.round(this.detectedItemList[y][x].have / 100) / 100 + '万' : this.detectedItemList[y][x].have.toString();
-                            const fontSize = Math.min(this.getSuitFontSize(this.detectedItemList[y][x].name, width, height), this.getSuitFontSize(NumberString, width, height));
-                            this.Ctx.font = fontSize + 'px serif';
-                            this.Ctx.fillText(this.detectedItemList[y][x].name, Math.floor(this.XBound[x][0] + (width) / 2), Math.floor(this.YBound[y][0] + (height) / 2));
-                            this.Ctx.fillText(NumberString, Math.floor(this.XBound[x][0] + (width) / 2), Math.floor(this.YBound[y][0] + (height) / 2) + fontSize);
-                        }
-                    }
-                    reduce();
-                }, 25);
-            });
+            for (let y = 0, Yall = this.detectedItemList.length; y < Yall; y++) {
+                for (let x = 0, Xall = this.detectedItemList[y].length; x < Xall; x++) {
+                    const width = this.XBound[x][1] - this.XBound[x][0];
+                    const height = this.YBound[y][1] - this.YBound[y][0];
+                    const NumberString = this.detectedItemList[y][x].have.toString();
+                    const fontSize = Math.min(this.getSuitFontSize(this.ItemNames[this.detectedItemList[y][x].id], width, height), this.getSuitFontSize(NumberString, width, height));
+                    this.Ctx.font = fontSize + 'px serif';
+                    this.Ctx.fillText(this.ItemNames[this.detectedItemList[y][x].id], Math.floor(this.XBound[x][0] + (width) / 2), Math.floor(this.YBound[y][0] + (height) / 2));
+                    this.Ctx.fillText(NumberString, Math.floor(this.XBound[x][0] + (width) / 2), Math.floor(this.YBound[y][0] + (height) / 2) + fontSize);
+                }
+            }
         } else {
             const x = pos[0];
             const y = pos[1];
             const width = this.XBound[x][1] - this.XBound[x][0];
             const height = this.YBound[y][1] - this.YBound[y][0];
-            const NumberString = (this.detectedItemList[y][x].have / 10000 >= 1) ? Math.round(this.detectedItemList[y][x].have / 100) / 100 + '万' : this.detectedItemList[y][x].have.toString();
+            const NumberString = this.detectedItemList[y][x].have.toString();
             // this.Ctx.font = this.getSuitFontSize(NumberString, width) + 'px serif';
-            const fontSize = Math.min(this.getSuitFontSize(this.detectedItemList[y][x].name, width, height), this.getSuitFontSize(NumberString, width, height));
+            const fontSize = Math.min(this.getSuitFontSize(this.ItemNames[this.detectedItemList[y][x].id], width, height), this.getSuitFontSize(NumberString, width, height));
             this.Ctx.font = fontSize + 'px serif';
-            this.Ctx.fillText(this.detectedItemList[y][x].name, Math.floor(this.XBound[x][0] + (width) / 2), Math.floor(this.YBound[y][0] + (height) / 2));
+            this.Ctx.fillText(this.ItemNames[this.detectedItemList[y][x].id], Math.floor(this.XBound[x][0] + (width) / 2), Math.floor(this.YBound[y][0] + (height) / 2));
             this.Ctx.fillText(NumberString, Math.floor(this.XBound[x][0] + (width) / 2), Math.floor(this.YBound[y][0] + (height) / 2) + fontSize);
         }
     }
@@ -771,5 +439,4 @@ export class AutoDetectHashComponent implements OnInit {
         }
     }
 }
-
 

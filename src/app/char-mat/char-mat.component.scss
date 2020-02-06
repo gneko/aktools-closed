@@ -17,6 +17,7 @@ div {
 option,
 .tpob {
   color: var(--mdc-theme-text-primary-on-background);
+  background-color: var(--mdc-theme-background);
 }
 
 .mdc-select__native-control:focus ~ .mdc-floating-label {
