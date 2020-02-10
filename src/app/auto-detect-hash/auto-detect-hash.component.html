@@ -1,16 +1,18 @@
 <div class="ad-containr" fxLayout="column">
 
     <div mdcCard class="card-title" fxLayout="row wrap" fxLayoutAlign="center center">
-        <button mdcButton raised dense type="button" (click)="Lock ? NotAgreeSecondDetect(): fileInput.click();">
+        <button mdcButton raised dense type="button" (click)="Lock ? NotAllowSecondDetect(): fileInput.click();">
             选择仓库图片
         </button>
         <input #fileInput type="file" id="test-image-file" name="test"
-            accept="image/gif, image/jpeg, image/png, image/jpg" (input)="choiceImage($event)" style="display:none;">
-        <button mdcButton raised dense [disabled]="!ImageLoaded || Lock" (click)="objectRegonition()">开始识别</button><br>
+            accept="image/gif, image/jpeg, image/png, image/jpg" (change)="choiceImage($event)" [disabled]="Lock"
+            style="display:none;"><br>
+        <button mdcButton raised dense [disabled]="!ImageLoaded || Lock" (click)="objectRegonition()">开始识别</button>
+        <a (click)="Route()" style="cursor:pointer;float:right">&nbsp;&nbsp;&nbsp;<small>识别率低？设置属于自己的识别数据！</small></a>
     </div>
     <div mdcCard fxLayout="row wrap">
         <div mdcCardActions fullBleed fxFlex="100">
-            <a mdcButton (click)="toMaterialCalc()">
+            <a mdcButton id="save-import" (click)="toMaterialCalc()">
                 保存并导入材料计算器 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </a>
         </div>

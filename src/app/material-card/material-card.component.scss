@@ -30,7 +30,7 @@ select {
 }
 
 .mdc-button--dense {
-  color: var(--mdc-theme-secondary);
+  color: var(--mdc-theme-on-surface);
   min-width: 20px;
   width: 20px;
   margin: 0;
@@ -93,10 +93,15 @@ select {
   margin: 0;
   text-align: end;
   align-items: flex-end;
-  color: $color-1;
+  color: $color-muted;
   font-weight: bold;
   min-width: 0px;
 }
+
+.need-button.notice {
+  color: $color-danger;
+}
+
 .need-button::before {
   position: inherit;
 }

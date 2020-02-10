@@ -1,25 +1,51 @@
 <aside #dialogPlan="mdcDialog" mdcDialog mdcFocusTrap>
   <div mdcDialogSurface>
     <header mdcDialogHeader>
-      <h2 mdcDialogHeaderTitle>材料路径规划（试行，仅供参考）</h2>
+      <h3 mdcDialogHeaderTitle>材料路径规划（试行，仅供参考）</h3>
     </header>
     <section mdcDialogBody scrollable>
-      <h4>by <a href="https://github.com/ycremar/ArkPlanner">@ycremar</a>(算法) & <a
-          href="https://github.com/invisiblearts/ArkPlanner">@invisiblearts</a>(数据)</h4>
-      <h4>体力预计消耗：<strong>{{cost}}</strong></h4>
-      <ng-container *ngIf="stagesText.length!==0">
-        <h4>刷本获取：</h4>
-        <ul mdcList>
-          <li mdcListItem *ngFor="let st of stagesText">{{st}}</li>
-        </ul>
-      </ng-container>
-      <ng-container *ngIf="synsText.length!==0">
-        <h4>合成获取：</h4>
-        <ul mdcList>
-          <li mdcListItem *ngFor="let sy of synsText">{{sy}}</li>
-        </ul>
-      </ng-container>
+      <div fxLayout="column">
 
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="2%" fxLayoutAlign="start center">
+          <div mdcFormField>
+            <div mdcSwitch>
+              <input mdcSwitchInput type="checkbox" [(ngModel)]="request.extra_outc" />
+            </div>
+            <label mdcFormFieldLabel>计算合成副产物</label>
+          </div>
+          <div mdcFormField>
+            <div mdcSwitch>
+              <input mdcSwitchInput type="checkbox" [(ngModel)]="request.exp_demand" />
+            </div>
+            <label mdcFormFieldLabel>需求大量经验</label>
+          </div>
+          <div mdcFormField>
+            <div mdcSwitch>
+              <input mdcSwitchInput type="checkbox" [(ngModel)]="request.gold_demand" />
+            </div>
+            <label mdcFormFieldLabel>需求大量龙门币</label>
+          </div>
+          <div>
+            <button mdcButton raised dense (click)="plan()">开始规划</button>
+          </div>
+        </div>
+        <h4>by <a href="https://github.com/ycremar/ArkPlanner">@ycremar</a>(算法) & <a
+            href="https://github.com/invisiblearts/ArkPlanner">@invisiblearts</a>(数据)</h4>
+        <h4>体力预计消耗：<strong>{{cost}}</strong></h4>
+        <ng-container *ngIf="stagesText.length!==0">
+          <h4>刷本获取：</h4>
+          <ul mdcList>
+            <li mdcListItem *ngFor="let st of stagesText">{{st}}</li>
+          </ul>
+        </ng-container>
+        <ng-container *ngIf="synsText.length!==0">
+          <h4>合成获取：</h4>
+          <ul mdcList>
+            <li mdcListItem *ngFor="let sy of synsText">{{sy}}</li>
+          </ul>
+        </ng-container>
+
+      </div>
     </section>
     <footer mdcDialogFooter>
       <button mdcButton mdcDialogCancel>关闭</button>
@@ -94,7 +120,7 @@
         <label mdcFormFieldLabel>过滤</label>
       </div>
       <div mdcFormField>
-        <button mdcButton raised dense (click)="plan();dialogPlan.open()">刷图规划</button>
+        <button mdcButton raised dense (click)="dialogPlan.open()">刷图规划</button>
       </div>
     </div>
   </div>

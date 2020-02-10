@@ -42,7 +42,6 @@ select {
 
 [mdcButton]:not(.mdc-button--raised) {
   color: var(--mdc-theme-on-surface);
-  
   &:hover, &:checked {
     color: var(--mdc-theme-on-primary);
     background-color: var(--mdc-theme-primary);
@@ -74,4 +73,31 @@ p, input, select {
 
 .select {
   border:blue 2px solid;
+}
+.mdc-dialog__surface {
+  color: var(--mdc-theme-on-surface);
+}
+
+.bitchar {
+  font-family: Courier;
+  color: green;
+  
+}
+.bitchar.bcred {
+  color: red;
+}
+[mdcTextField] {
+  height: 200px;
+  width: 100%;
+  textarea {
+    color: $color-muted;
+    background-color: rgba($color-dark, 0.1);
+    resize: none;
+    width: 100%;
+    height: 185px;
+    font-size: small;
+  }
+}
+.mdc-text-field__input {
+  padding: 0.5em;
 }

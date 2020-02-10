@@ -24,6 +24,7 @@ import { CharMatMatcardComponent } from './char-mat-matcard/char-mat-matcard.com
 import { SettingsComponent } from './settings/settings.component';
 import { AutoDetectComponent } from './auto-detect/auto-detect.component';
 import { AutoDetectHashComponent } from './auto-detect-hash/auto-detect-hash.component';
+import { DetectSetttingComponent } from './detect-setting/detect-setting.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AutoDetectHashComponent } from './auto-detect-hash/auto-detect-hash.com
     CharMatMatcardComponent,
     SettingsComponent,
     AutoDetectComponent,
-    AutoDetectHashComponent
+    AutoDetectHashComponent,
+    DetectSetttingComponent
   ],
   imports: [
     BrowserModule,

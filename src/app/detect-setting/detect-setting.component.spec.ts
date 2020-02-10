@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AutoDetectHashComponent } from './auto-detect-hash.component';
+import { DetectSetttingComponent } from './detect-setting.component';
 
-describe('AutoDetectHashComponent', () => {
-  let component: AutoDetectHashComponent;
-  let fixture: ComponentFixture<AutoDetectHashComponent>;
+describe('AutoDetectComponent', () => {
+  let component: DetectSetttingComponent;
+  let fixture: ComponentFixture<DetectSetttingComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AutoDetectHashComponent ]
+      declarations: [ DetectSetttingComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AutoDetectHashComponent);
+    fixture = TestBed.createComponent(DetectSetttingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

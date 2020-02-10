@@ -31,6 +31,14 @@ export class MaterialComponent implements OnInit {
   exportedData = '';
   importedData = '';
 
+  request: any = {
+    owned: null, 
+    required: null, 
+    exp_demand: false, 
+    extra_outc: false, 
+    gold_demand: false
+  }
+
   calc(): void {
     const counts = {};
     for (const i of this.items) {
@@ -190,8 +198,10 @@ export class MaterialComponent implements OnInit {
         }
       }
     }
-    this.planResult = this.fetchService.postJson('https://ak.inva.land/plan/',
-      { owned, required, exp_demand: false, extra_outc: false, gold_demand: false })
+    this.request.owned=owned;
+    this.request.required=required;
+    this.planResult = this.fetchService.postJson('https://planner.penguin-stats.io/plan/',
+      this.request)
       .subscribe(plan => {
         this.cost = plan && plan.cost ? plan.cost : 0;
         const stage = plan && plan.stages && plan.stages.length !== 0 ? [...plan.stages] : [];

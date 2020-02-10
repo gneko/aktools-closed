@@ -3,7 +3,7 @@ $mdc-theme-on-primary: rgba(202, 202, 202, 0.9);
 
 $mdc-theme-secondary   : rgb(34, 187, 255);
 $mdc-theme-on-secondary: rgb(51, 51, 51, 0.9);
-$mdc-theme-background  : rgba(0, 0, 0, 0.9);
+$mdc-theme-background  : #3F3F3F;
 
 $mdc-theme-surface   : rgba(51, 51, 51, 0.9);
 $mdc-theme-on-surface: rgba(240, 240, 240);
@@ -23,7 +23,7 @@ $mdc-theme-on-surface: rgba(240, 240, 240);
 body {
 
   background-attachment: fixed;
-  background-color: black;
+  background-color: #3F3F3F;
   // background-image: url(https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg);
   background-position: center;
   background-repeat: no-repeat;
