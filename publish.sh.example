@@ -1,19 +1,23 @@
 # Publish to Github pages
 # Get your token from https://github.com/settings/tokens
+NAME="GithubUserName"
+EMAIL=E-mail
 TOKEN=AAAAAAAAAAAAAAAAAAAAAAAA
 CNAME=aktools.graueneko.xyz
 REPO=github.com/graueneko/aktools.git
 PROJECT=aktools
 
-ng build --prod --base-href "https://$CNAME/" && npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=graueneko@gmail.com --name="graueneko"
+ng build --prod --base-href "https://$CNAME/" && npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=$EMAIL --name=$NAME
 
 
 # Publish to Tencent Pages
 # Get your token from https://dev.tencent.com/user/account/setting/tokens
+NAME="GithubUserName"
+EMAIL=E-mail
 TOKEN=AAAAAAAAAAAAAAAAAAAAAAAA
 CNAME=aktoolscn.graueneko.xyz
 REPO=git.dev.tencent.com/graueneko/aktools.git
 PROJECT=aktools
 
-ng build --prod --base-href "https://$CNAME/" && npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=graueneko@gmail.com --name="graueneko" --branch=coding-pages
+ng build --prod --base-href "https://$CNAME/" && npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=EMAIL --name=$NAME --branch=coding-pages
 
