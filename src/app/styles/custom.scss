@@ -29,3 +29,7 @@ button {
 a {
   text-decoration: none;
 }
+option {
+  color: var(--mdc-theme-text-primary-on-background);
+  background-color: var(--mdc-theme-background);
+}

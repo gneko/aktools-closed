@@ -21,7 +21,7 @@
 
 有任何建议、想法，或发现 Bug，可以直接在本项目下提 [Issue](https://github.com/graueneko/aktools/issues)。
 
-如果你实现了新功能/改进可以合并到 origin/master上，请发起 [Pulll request](https://github.com/graueneko/aktools/pulls).
+如果你实现了新功能/改进可以合并到 origin/master上，请发起 [Pull request](https://github.com/graueneko/aktools/pulls).
 
 ## 开发
 

@@ -8,247 +8,55 @@ import { Router } from '@angular/router';
     styleUrls: ['./auto-detect-hash.component.scss']
 })
 export class AutoDetectHashComponent implements OnInit {
-    // tslint:disable: all
-    ImageElement: HTMLImageElement;
+    //tslint:disable: all
+    ImageElement: HTMLImageElement; // 源图片
     ImageLoaded: boolean;
     Canvas: HTMLCanvasElement;
     Ctx: CanvasRenderingContext2D;
-    ImageData: ImageData;
-    worker: Worker;
+    worker: Worker; // WebWorker
     InfoText = '等待处理';
     progress: 0;
-    XBound = [];
+    XBound = []; // X轴与Y轴方向上的物品边界
     YBound = [];
-    ItemImages = [];
-    ItemImage: any;
-    NumberImages = [];
+    ItemImages = []; // 每个物品的图像
+    ItemImage: any; // 单个物品的图像
+    NumberImages = []; // 数字的图像
     textColor: any;
     MaxFontSize: any;
     FontSize = 0;
     ModifyingItem = null;
     ModifyBuffer: any = { have: 0, delete: false };
     Modifying = { x: 0, y: 0 };
-    ItemNames: Object;
+    ItemNames: object;
     detectedItemList = [];
-    ItemHashList: any[] = [
-        {
-            "id": "3222",
-            "hash": [0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "3241",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "3261",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "3262",
-            "hash": [0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "3301",
-            "hash": [0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "3303",
-            "hash": [1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30011",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30012",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30013",
-            "hash": [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30021",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30022",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30024",
-            "hash": [1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30031",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30032",
-            "hash": [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30033",
-            "hash": [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30034",
-            "hash": [0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30041",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30042",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30043",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30044",
-            "hash": [0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30051",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30053",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30061",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
-            "count": 1
-        },
-        {
-            "id": "30062",
-            "hash": [0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
-            "count": 1
-        },
-        {
-            "id": "30063",
-            "hash": [1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-            "count": 1
-        },
-        {
-            "id": "30073",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30074",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30083",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30084",
-            "hash": [0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30093",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30103",
-            "hash": [0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30104",
-            "hash": [0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30115",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30125",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "30135",
-            "hash": [0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "31013",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-        {
-            "id": "31014",
-            "hash": [0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-
-        {
-            "id": "31023",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        },
-
-        {
-            "id": "31024",
-            "hash": [1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0],
-            "count": 1
-        },
-
-        {
-            "id": "32001",
-            "hash": [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-            "count": 1
-        }
-    ];
+    ItemHashList: any[] = [];
     Lock = false;
     constructor(private fetchService: FetchService, private snackbar: MdcSnackbarService, private router: Router, private el: ElementRef) {
     }
 
     async ngOnInit() {
-        this.fetchService.getJson('./assets/data/material.json').subscribe(data => {
-            this.ItemNames = { "0000": "该位置无物品" };
-            for (const i in data) {
-                if (data[i]) {
-                    this.ItemNames[data[i].id] = data[i].name;
+        this.fetchService.getJson('./assets/data/detectdata.json').subscribe(Hashdata => {
+            this.ItemHashList = [...Hashdata];
+            this.fetchService.getJson('./assets/data/material.json').subscribe(data => {
+                const idata = this.fetchService.getLocalStorage('m-data', {});
+                const initIdata = Object.keys(idata).length === 0;
+                this.ItemNames = { '0000': '该位置无物品' };
+                for (const i in data) {
+                    if (initIdata) {
+                        idata[data[i].name] = {
+                            have: 0, need: 0, lack: 0, canMerge: false, name: data[i].name
+                        }
+                    }
+                    if (data[i]) {
+                        this.ItemNames[data[i].id] = data[i].name;
+                    }
                 }
-            }
-            this.registerWorker();
-        })
+                if (initIdata) {
+                    this.fetchService.setLocalStorage('m-data', idata);
+                }
+                this.registerWorker();
+            });
+        });
         this.ImageElement = document.createElement('img');
         this.Canvas = this.el.nativeElement.getElementsByTagName('canvas')[0];
         this.Ctx = this.Canvas.getContext('2d');
@@ -259,7 +67,7 @@ export class AutoDetectHashComponent implements OnInit {
     ModifyData(dialog: any, e: MouseEvent) {
         if (this.detectedItemList.length === 0) { return; }
         const rect = this.Canvas.getBoundingClientRect();
-        const clickY = e.offsetY * (this.Canvas.height / rect.height);
+        const clickY = e.offsetY * (this.Canvas.height / rect.height); // 换算物品位置
         const clickX = e.offsetX * (this.Canvas.width / rect.width);
         let x: number;
         let y: number;
@@ -279,21 +87,24 @@ export class AutoDetectHashComponent implements OnInit {
         }
         if (typeof x === 'undefined' || typeof y === 'undefined') { return; }
         this.ItemImage = this.ItemImages[this.XBound.length * y + x].toDataURL();
-        this.ModifyingItem = this.detectedItemList[y][x];
-        for (let id of Object.keys(this.ItemNames)) {
+        this.ModifyingItem = this.detectedItemList[y][x]; // 确定正在修改的物品
+        for (const id of Object.keys(this.ItemNames)) {
             if (!this.ModifyingItem.item.some(a => {
-                return a.id == id
+                return a.id == id;
             })) {
                 this.ModifyingItem.item.push({
-                    id: id,
+                    id,
                     hash: new Array(144).fill(0),
                     count: 0
-                })
+                });
             }
+        }
+        if (!this.ModifyingItem.delete) {
+            this.ModifyingItem.delete = false;
         }
         for (const key of Object.keys(this.ModifyingItem)) {
             if (typeof this.ModifyingItem[key] !== 'object') {
-                this.ModifyBuffer[key] = this.ModifyingItem[key];
+                this.ModifyBuffer[key] = this.ModifyingItem[key]; // 深拷贝
             }
         }
         this.Modifying.y = y;
@@ -342,14 +153,6 @@ export class AutoDetectHashComponent implements OnInit {
             }
         });
     }
-    NotAllowSecondDetect() {
-        this.snackbar.show({
-            message: '请先导入材料计算在进行下一次识别(因为开发者懒得重置变量)。',
-            actionText: '好的',
-            multiline: false,
-            actionOnBottom: false
-        });
-    }
     async toMaterialCalc() {
         if (!this.detectedItemList || this.detectedItemList.length === 0) {
             this.snackbar.show({
@@ -361,15 +164,6 @@ export class AutoDetectHashComponent implements OnInit {
             return;
         }
         const data = this.fetchService.getLocalStorage('m-data', {});
-        if (Object.keys(data).length === 0) {
-            this.snackbar.show({
-                message: '请先打开一次材料计算页面。',
-                actionText: '好的',
-                multiline: false,
-                actionOnBottom: false
-            });
-            return;
-        }
         for (let y = 0, Yall = this.detectedItemList.length; y < Yall; y++) {
             for (let x = 0, Xall = this.detectedItemList[y].length; x < Xall; x++) {
                 if (this.ItemNames[this.detectedItemList[y][x].id] in data && !isNaN(this.detectedItemList[y][x].have) && this.detectedItemList[y][x].have !== 0 && !this.detectedItemList[y][x].delete) {
@@ -378,9 +172,15 @@ export class AutoDetectHashComponent implements OnInit {
             }
         }
         this.fetchService.setLocalStorage('m-data', data);
-        this.router.navigateByUrl('/material');
+        this.snackbar.show({
+            message: '导入成功',
+            actionText: '好的',
+            multiline: false,
+            actionOnBottom: false
+        });
     }
     LoadImage(src: string) {
+        this.reset();
         this.ImageElement.onload = e => {
             this.ImageLoaded = true;
             this.Canvas.width = this.ImageElement.width;
@@ -389,12 +189,39 @@ export class AutoDetectHashComponent implements OnInit {
         };
         this.ImageElement.src = src;
     }
+    reset() {
+        this.InfoText = '等待处理';
+        this.progress = 0;
+        this.XBound = []; // X轴与Y轴方向上的物品边界
+        this.YBound = [];
+        this.ItemImages = []; // 每个物品的图像
+        this.NumberImages = []; // 数字的图像
+        this.ModifyingItem = null;
+        this.ModifyBuffer = { have: 0, delete: false };
+        this.Modifying = { x: 0, y: 0 };
+        this.detectedItemList = [];
+        this.ItemHashList = [];
+        this.Lock = false;
+    }
     registerWorker() {
         this.worker = new Worker('./detect.worker', { type: 'module' });
         this.worker.onmessage = this.MessageDeal.bind(this);
-        this.ItemHashList = JSON.parse(localStorage.getItem("detect-setting")) || (Boolean(localStorage.setItem("detect-setting", JSON.stringify(this.ItemHashList))) || this.ItemHashList);
-        this.ItemHashList = this.ItemHashList.filter(v => v.id in this.ItemNames);
-        this.worker.postMessage({ method: "LoadHashData", Data: this.ItemHashList });
+        let ItemHashList = JSON.parse(localStorage.getItem('detect-setting')) || (Boolean(localStorage.setItem('detect-setting', JSON.stringify(this.ItemHashList))) || this.ItemHashList);
+        if (ItemHashList !== this.ItemHashList) {
+            const sl = ItemHashList.length;
+            for (let i = 0; i < this.ItemHashList.length; i++) {
+                if (!ItemHashList.some(v => {
+                    return v.id == this.ItemHashList[i].id
+                })) {
+                    ItemHashList.push(this.ItemHashList[i])
+                }
+            }
+            if (sl != ItemHashList.length) {
+                this.ItemHashList = ItemHashList;
+                localStorage.setItem('detect-setting', JSON.stringify(this.ItemHashList));
+            }
+        }
+        this.worker.postMessage({ method: 'LoadHashData', Data: this.ItemHashList });
     }
     objectRegonition() {
         this.Lock = true;
@@ -407,6 +234,7 @@ export class AutoDetectHashComponent implements OnInit {
                 this.progress = message.data.progress;
                 break;
             case 'clipImage':
+                // 根据识别的边界切割图片数据
                 this.XBound = message.data.XBound;
                 this.YBound = message.data.YBound;
                 const ImageDatas = [];
@@ -427,13 +255,14 @@ export class AutoDetectHashComponent implements OnInit {
                         this.Ctx.strokeRect(this.XBound[x][0], this.YBound[y][0], Canvas.width, Canvas.height);
                     }
                 }
-                this.worker.postMessage({ method: 'calcDhash', ImageDatas });
+                this.worker.postMessage({ method: 'calcDhash', ImageDatas }); // 请求生成物品dHash
                 break;
             case 'getNumberData':
                 const NumberTop = 0.705;
                 const NumberHeight = 0.235;
                 const NumberLeft = 0.405;
-                let SingleNumberClipImageDatas: Array<Array<ImageData>> = [];
+                // 切割数字
+                const SingleNumberClipImageDatas: Array<Array<ImageData>> = [];
                 for (let y = 0; y < this.YBound.length; y++) {
                     for (let x = 0; x < this.XBound.length; x++) {
                         const Canvas = document.createElement('canvas');
@@ -528,15 +357,15 @@ export class AutoDetectHashComponent implements OnInit {
                                 NewLabel.push([LabelIndex]);
                             }
                         }
-                        let Bounds: Array<Array<number>> = [];
+                        const Bounds: Array<Array<number>> = [];
                         for (let i = 0; i < NewLabel.length; i++) {
                             Bounds.push([Infinity/* 左 */, Infinity/* 上 */, -Infinity/* 右 */, -Infinity/* 下 */]);
                         }
                         for (let yb = 0; yb < SData.length; yb++) {
                             for (let xb = 0; xb < SData[yb].length; xb++) {
                                 if (SData[yb][xb] !== 0) {
-                                    let Label = NewLabel.findIndex((v) => {
-                                        return v.includes(SData[yb][xb])
+                                    const Label = NewLabel.findIndex((v) => {
+                                        return v.includes(SData[yb][xb]);
                                     });
                                     SData[yb][xb] = Label + 1;
                                     Bounds[Label][0] = Math.min(Bounds[Label][0], xb);
@@ -547,57 +376,57 @@ export class AutoDetectHashComponent implements OnInit {
                             }
                         }
                         let SingleNumberImageDatas = [];
-                        for (let Bound of Bounds) {
-                            let isInf = Math.abs(Bound.reduce((a, b) => {
+                        for (const Bound of Bounds) {
+                            const isInf = Math.abs(Bound.reduce((a, b) => {
                                 return a + b;
                             }));
                             if (isInf === Infinity || Bound[0] <= 2 || allNumberImageData.width - Bound[2] <= 2 || Bound[1] < 2 || allNumberImageData.height - Bound[3] <= 2) {
                                 SingleNumberImageDatas.push(false);
                                 continue;
                             }
-                            const width = Bound[2] - Bound[0] + 1, height = Bound[3] - Bound[1] + 1
+                            const width = Bound[2] - Bound[0] + 1, height = Bound[3] - Bound[1] + 1;
                             if (width > height || width < 5 || height < 9) {
                                 SingleNumberImageDatas.push(false);
                                 continue;
                             }
-                            SingleNumberImageDatas.push(new ImageData(new Uint8ClampedArray(width * height * 4).fill(255), width, height))
+                            SingleNumberImageDatas.push(new ImageData(new Uint8ClampedArray(width * height * 4).fill(255), width, height));
                         }
+                        // 重新绘制数字便于识别
                         for (let yb = 0; yb < SData.length; yb++) {
                             for (let xb = 0; xb < SData[yb].length; xb++) {
                                 if (SData[yb][xb] !== 0) {
-                                    if (SingleNumberImageDatas[SData[yb][xb] - 1] === false) continue;
+                                    if (SingleNumberImageDatas[SData[yb][xb] - 1] === false) { continue; }
                                     const yc = yb - Bounds[SData[yb][xb] - 1][1], xc = xb - Bounds[SData[yb][xb] - 1][0];
-                                    let index = (yc * SingleNumberImageDatas[SData[yb][xb] - 1].width + xc) * 4
-                                    SingleNumberImageDatas[SData[yb][xb] - 1].data.fill(0, index, index + 3)
+                                    const index = (yc * SingleNumberImageDatas[SData[yb][xb] - 1].width + xc) * 4;
+                                    SingleNumberImageDatas[SData[yb][xb] - 1].data.fill(0, index, index + 3);
                                 }
                             }
                         }
                         SingleNumberImageDatas = SingleNumberImageDatas.map((v, i) => [Bounds[i][0], v]).sort((a, b) => a[0] - b[0]).map(v => v[1]);
-                        let SingleNumberCtx: Array<CanvasRenderingContext2D> = [];
-                        let ImageIndex = SingleNumberClipImageDatas.push([]) - 1;
-                        for (let SingleNumberImageData of SingleNumberImageDatas) {
-                            if (SingleNumberImageData == false) continue;
-                            let Canvas = document.createElement("canvas");
+                        const SingleNumberCtx: Array<CanvasRenderingContext2D> = [];
+                        const ImageIndex = SingleNumberClipImageDatas.push([]) - 1;
+                        for (const SingleNumberImageData of SingleNumberImageDatas) {
+                            if (SingleNumberImageData == false) { continue; }
+                            const Canvas = document.createElement('canvas');
                             Canvas.width = SingleNumberImageData.width;
                             Canvas.height = SingleNumberImageData.height;
-                            let Ctx = Canvas.getContext("2d");
+                            const Ctx = Canvas.getContext('2d');
                             Ctx.putImageData(SingleNumberImageData, 0, 0);
-                            SingleNumberCtx.push(Ctx)
-                            let ClipCanvas = document.createElement("canvas");
-                            ClipCanvas.width = 9
-                            ClipCanvas.height = 10
-                            let ClipCtx = ClipCanvas.getContext("2d");
+                            SingleNumberCtx.push(Ctx);
+                            const ClipCanvas = document.createElement('canvas');
+                            ClipCanvas.width = 9;
+                            ClipCanvas.height = 10;
+                            const ClipCtx = ClipCanvas.getContext('2d');
                             ClipCtx.drawImage(Canvas, 0, 0, Canvas.width, Canvas.height, 0, 0, ClipCanvas.width, ClipCanvas.height);
                             SingleNumberClipImageDatas[ImageIndex].push(ClipCtx.getImageData(0, 0, ClipCanvas.width, ClipCanvas.height));
                         }
-                        document.body.appendChild(document.createElement("br"));
                     }
                 }
-                this.worker.postMessage({ method: "getItemCount", ImageDatas: SingleNumberClipImageDatas });
+                this.worker.postMessage({ method: 'getItemCount', ImageDatas: SingleNumberClipImageDatas }); // 请求识别数字
                 break;
-            case "DetectResult":
+            case 'DetectResult':
                 for (let y = 0; y < this.YBound.length; y++) {
-                    this.detectedItemList.push([])
+                    this.detectedItemList.push([]);
                 }
                 for (let y = 0; y < this.YBound.length; y++) {
                     for (let x = 0; x < this.XBound.length; x++) {
@@ -605,7 +434,8 @@ export class AutoDetectHashComponent implements OnInit {
                             id: message.data.Items[y * this.XBound.length + x][0].id,
                             name: this.ItemNames[message.data.Items[y * this.XBound.length + x][0].id],
                             have: message.data.NumberResult[y * this.XBound.length + x],
-                            item: message.data.Items[y * this.XBound.length + x]
+                            item: message.data.Items[y * this.XBound.length + x].filter(a => a.id in this.ItemNames),
+                            delete: !(message.data.Items[y * this.XBound.length + x][0].id in this.ItemNames)
                         };
                     }
                 }
@@ -616,11 +446,11 @@ export class AutoDetectHashComponent implements OnInit {
 
     drawText(...pos: number[]) {
         this.Ctx.fillStyle = this.textColor;
-        this.Ctx.textAlign = "center";
+        this.Ctx.textAlign = 'center';
         if (pos.length === 0) {
             for (let y = 0, Yall = this.detectedItemList.length; y < Yall; y++) {
                 for (let x = 0, Xall = this.detectedItemList[y].length; x < Xall; x++) {
-                    if (this.detectedItemList[y][x].id == "0000") continue;
+                    if (this.detectedItemList[y][x].id == '0000' || !(this.detectedItemList[y][x].id in this.ItemNames)) { continue; }
                     const width = this.XBound[x][1] - this.XBound[x][0];
                     const height = this.YBound[y][1] - this.YBound[y][0];
                     const NumberString = this.detectedItemList[y][x].have.toString();
@@ -633,7 +463,7 @@ export class AutoDetectHashComponent implements OnInit {
         } else {
             const x = pos[0];
             const y = pos[1];
-            if (this.detectedItemList[y][x].id == "0000") return void 0;
+            if (this.detectedItemList[y][x].id == '0000' || !(this.detectedItemList[y][x].id in this.ItemNames)) { return void 0; }
             const width = this.XBound[x][1] - this.XBound[x][0];
             const height = this.YBound[y][1] - this.YBound[y][0];
             const NumberString = this.detectedItemList[y][x].have.toString();

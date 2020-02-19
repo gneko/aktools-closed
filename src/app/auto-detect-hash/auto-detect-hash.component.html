@@ -1,11 +1,11 @@
 <div class="ad-containr" fxLayout="column">
 
     <div mdcCard class="card-title" fxLayout="row wrap" fxLayoutAlign="center center">
-        <button mdcButton raised dense type="button" (click)="Lock ? NotAllowSecondDetect(): fileInput.click();">
+        <button mdcButton raised dense type="button" (click)="fileInput.click();">
             选择仓库图片
         </button>
         <input #fileInput type="file" id="test-image-file" name="test"
-            accept="image/gif, image/jpeg, image/png, image/jpg" (change)="choiceImage($event)" [disabled]="Lock"
+            accept="image/gif, image/jpeg, image/png, image/jpg" (change)="choiceImage($event)"
             style="display:none;"><br>
         <button mdcButton raised dense [disabled]="!ImageLoaded || Lock" (click)="objectRegonition()">开始识别</button>
         <a (click)="Route()" style="cursor:pointer;float:right">&nbsp;&nbsp;&nbsp;<small>识别率低？设置属于自己的识别数据！</small></a>
@@ -63,7 +63,8 @@
                             </span>
                         </div>
                     </ng-container>
-                    <p *ngIf="ModifyingItem!==null&&ModifyBuffer.delete">该材料已被删除</p>
+                    <p *ngIf="ModifyingItem!==null&&ModifyBuffer.delete">
+                        {{ItemNames.hasOwnProperty(ModifyBuffer.id) ? "该材料已被删除" : "该材料不计入材料计算"}}</p>
                 </div>
             </section>
             <footer mdcDialogFooter>

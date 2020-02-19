@@ -67,7 +67,6 @@ for (let hash of ItemHashList) {
 let BoundDatas = [
     { R: [225, 255], G: [175, 205], B: [0, 10] },
     { R: [208, 222], G: [185, 205], B: [208, 222] },
-    { R: [208, 222], G: [185, 205], B: [208, 222] },
     { R: [0, 5], G: [170, 190], B: [240, 255] },
     { R: [215, 245], G: [225, 240], B: [50, 60] },
     { R: [0, 10], G: [0, 4], B: [0, 4] },
@@ -94,13 +93,23 @@ function fillPixelData(ImageData) {
 }
 function analyzeBound() {
     for (let x = 0, WhiteSpace = 0, LastBlank = 0; x < XPoint.length; x++) {
-        if (XPoint[x] > 2) {
+        if (XPoint[x] > 8) {
             if (XBound[XBound.length - 1].length == 0) {
                 XBound[XBound.length - 1][0] = x;
                 WhiteSpace = 0;
             }
             LastBlank = x;
             WhiteSpace = 0;
+        } else if(XPoint[x]>2&&XPoint[x]<=8){
+            //给色彩识别打个补丁(避免噪点)
+            if(XPoint[x - 1]>8||XPoint[x + 1]>8){
+                if (XBound[XBound.length - 1].length == 0) {
+                    XBound[XBound.length - 1][0] = x;
+                    WhiteSpace = 0;
+                }
+                LastBlank = x;
+                WhiteSpace = 0;
+            }
         } else if (XBound[XBound.length - 1].length == 1 && WhiteSpace >= 10) {
             XBound[XBound.length - 1][1] = LastBlank;
             XBound.push([])
@@ -133,8 +142,9 @@ function analyzeBound() {
             }
         }
     }
+    // 纵向的数据量大，不用考虑噪点问题
     for (let y = 0, WhiteSpace = 0, LastBlank = 0; y < YPoint.length; y++) {
-        if (YPoint[y] > 5) {
+        if (YPoint[y] > 8) {
             if (YBound[YBound.length - 1].length == 0) {
                 YBound[YBound.length - 1][0] = y;
                 WhiteSpace = 0;
@@ -154,7 +164,7 @@ function analyzeBound() {
         YBound.pop();
     }
     for (let y = 0; y < YBound.length; y++) {
-        if (YBound[y][0] == YBound[y][1]) {
+        if (YBound[y][1] - YBound[y][0] < 50) {
             YBound.splice(y, 1)
             y--;
         }

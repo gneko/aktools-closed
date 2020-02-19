@@ -28,9 +28,8 @@
                     <ng-container *ngIf="ModifyingItem!==null">
                         <div mdcSelect style="width:80%;">
                             <select mdcSelectControl [(ngModel)]="ModifyBuffer.id">
-                                <option *ngFor="let item of ModifyingItem.item; let i=index" [value]="item.id"
-                                    ng-selected="i === 0">
-                                    {{ItemNames[item.id]}}</option>
+                                <option *ngFor="let item of ItemNames | keyvalue; let i=index" [value]="item.key"
+                                    ng-selected="i === 0">{{item.value}}</option>
                             </select>
                             <label mdcFloatingLabel></label>
                         </div>
