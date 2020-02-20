@@ -1,104 +1,104 @@
 <div class="ad-containr" fxLayout="column">
 
-    <div mdcCard class="card-title" fxLayout="row wrap" fxLayoutAlign="center center">
-        <button mdcButton raised dense type="button" (click)="dialogImport.open()">
-            导入
-        </button>
-        <button mdcButton raised dense type="button" (click)="fileInput.click();">
-            选择仓库图片
-        </button>
-        <button mdcButton raised dense type="button" (click)="dialogExport.open()">
-            导出
-        </button>
-        <input #fileInput type="file" id="test-image-file" name="test"
-            accept="image/gif, image/jpeg, image/png, image/jpg" (change)="choiceImage($event)"
-            style="display:none;"><br>
-    </div>
-    <canvas (click)="ChoiceItem($event,dialog)" style="margin:0 auto;">浏览器不支持Canvas 建议您换用最新版的Chrome/Firefox浏览器</canvas>
-    <aside #dialog="mdcDialog" mdcDialog mdcFocusTrap>
-        <div mdcDialogSurface>
-            <header mdcDialogHeader>
-                <h2 mdcDialogHeaderTitle>修改数据</h2>
-            </header>
-            <section mdcDialogBody>
-                <div id="headImage" style="text-align: center;">
-                    <img [src]="ItemImage||''" style="margin: 0 auto;" width="100" />
-                </div>
-                <div id="DataChange" style="text-align: center;">
-                    <ng-container *ngIf="ModifyingItem!==null">
-                        <div mdcSelect style="width:80%;">
-                            <select mdcSelectControl [(ngModel)]="ModifyBuffer.id">
-                                <option *ngFor="let item of ItemNames | keyvalue; let i=index" [value]="item.key"
-                                    ng-selected="i === 0">{{item.value}}</option>
-                            </select>
-                            <label mdcFloatingLabel></label>
-                        </div>
-                    </ng-container>
-                </div>
-                <div *ngIf="ModifyingItem!==null" style="text-align: center;">源物品数据为{{RecordItemHash[ModifyBuffer.id].count}}个数据的平均值</div>
-                <div *ngIf="ModifyingItem!==null">
-                    <div>
-                        源hash:<span class="bitchar"
-                            [ngClass]="{'bcred': RecordItemHash[ModifyBuffer.id].hash[i]!=OriginHash[i]&&RecordItemHash[ModifyBuffer.id].hash[i]!=2}"
-                            *ngFor="let item of RecordItemHash[ModifyBuffer.id].hash.slice(0,72); let i=index">{{item}}</span>
-                    </div>
-                    <div>
-                        现hash:<span class="bitchar"
-                            [ngClass]="{'bcred': RecordItemHash[ModifyBuffer.id].hash[i]!=OriginHash[i]&&RecordItemHash[ModifyBuffer.id].hash[i]!=2}"
-                            *ngFor="let item of OriginHash.slice(0,72); let i=index">{{item}}</span>
-                    </div>
-                    <div>
-                        源hash:<span class="bitchar"
-                            [ngClass]="{'bcred': RecordItemHash[ModifyBuffer.id].hash[i+72]!=OriginHash[i+72]&&RecordItemHash[ModifyBuffer.id].hash[i+72]!=2}"
-                            *ngFor="let item of RecordItemHash[ModifyBuffer.id].hash.slice(72,144); let i=index">{{item}}</span>
-                    </div>
-                    <div>
-                        现hash:<span class="bitchar"
-                            [ngClass]="{'bcred': RecordItemHash[ModifyBuffer.id].hash[i+72]!=OriginHash[i+72]&&RecordItemHash[ModifyBuffer.id].hash[i+72]!=2}"
-                            *ngFor="let item of OriginHash.slice(72,144); let i=index">{{item}}</span>
-                    </div>
-                </div>
-            </section>
-            <footer mdcDialogFooter>
-                <button mdcButton mdcDialogCancel>取消</button>
-                <button mdcButton mdcDialogAccept (click)="Merge()">取均值合并</button>
-                <button mdcButton mdcDialogAccept (click)="Replace()">替换源Hash</button>
-            </footer>
-        </div>
-        <div mdcDialogBackdrop></div>
-    </aside>
-    <aside #dialogExport="mdcDialog" mdcDialog mdcFocusTrap>
-        <div mdcDialogSurface>
-            <header mdcDialogHeader>
-                <h2 mdcDialogHeaderTitle>导出数据</h2>
-            </header>
-            <section mdcDialogBody>
-                <div mdcTextField [dense]="true">
-                    <textarea #Input1 mdcTextFieldInput [value]="Data()"></textarea>
-                </div>
-            </section>
-            <footer mdcDialogFooter>
-                <button mdcButton mdcDialogCancel>取消</button>
-                <button mdcButton mdcDialogAccept (click)="Copy(Input1)">复制</button>
-            </footer>
-        </div>
-        <div mdcDialogBackdrop></div>
-    </aside>
-    <aside #dialogImport="mdcDialog" mdcDialog mdcFocusTrap>
+  <div mdcCard class="card-title" fxLayout="row wrap" fxLayoutAlign="center center">
+    <button mdcButton raised dense type="button" (click)="dialogImport.open()">
+      导入
+    </button>
+    <button mdcButton raised dense type="button" (click)="fileInput.click();">
+      选择仓库图片
+    </button>
+    <button mdcButton raised dense type="button" (click)="dialogExport.open()">
+      导出
+    </button>
+    <input #fileInput type="file" id="test-image-file" name="test" accept="image/gif, image/jpeg, image/png, image/jpg"
+      (change)="choiceImage($event)" style="display:none;"><br>
+  </div>
+  <canvas (click)="ChoiceItem($event,dialog)" style="margin:0 auto;">浏览器不支持Canvas 建议您换用最新版的Chrome/Firefox浏览器</canvas>
+  <aside #dialog="mdcDialog" mdcDialog mdcFocusTrap>
     <div mdcDialogSurface>
-        <header mdcDialogHeader>
-            <h2 mdcDialogHeaderTitle>导入数据</h2>
-        </header>
-        <section mdcDialogBody>
-            <div mdcTextField [dense]="true">
-                <textarea #Input2 mdcTextFieldInput></textarea>
+      <header mdcDialogHeader>
+        <h2 mdcDialogHeaderTitle>修改数据</h2>
+      </header>
+      <section mdcDialogBody>
+        <div id="headImage" style="text-align: center;">
+          <img [src]="ItemImage||''" style="margin: 0 auto;" width="100" />
+        </div>
+        <div id="DataChange" style="text-align: center;">
+          <ng-container *ngIf="ModifyingItem!==null">
+            <div mdcSelect style="width:80%;">
+              <select mdcSelectControl [(ngModel)]="ModifyBuffer.id" [disabled]='ModifyBuffer.delete'>
+                <option *ngFor="let item of ModifyingItem.item; let i=index" [value]="item.id" ng-selected="i === 0">
+                  {{ItemNames[item.id]}}</option>
+              </select>
+              <label mdcFloatingLabel></label>
             </div>
-        </section>
-        <footer mdcDialogFooter>
-            <button mdcButton mdcDialogCancel>取消</button>
-            <button mdcButton mdcDialogAccept (click)="Import(Input2)">导入</button>
-        </footer>
+          </ng-container>
+        </div>
+        <div *ngIf="ModifyingItem!==null" style="text-align: center;">
+          源物品数据为{{RecordItemHash[ModifyBuffer.id].count}}个数据的平均值</div>
+        <div *ngIf="ModifyingItem!==null">
+          <div>
+            源hash:<span class="bitchar"
+              [ngClass]="{'bcred': RecordItemHash[ModifyBuffer.id].hash[i]!=OriginHash[i]&&RecordItemHash[ModifyBuffer.id].hash[i]!=2}"
+              *ngFor="let item of RecordItemHash[ModifyBuffer.id].hash.slice(0,72); let i=index">{{item}}</span>
+          </div>
+          <div>
+            现hash:<span class="bitchar"
+              [ngClass]="{'bcred': RecordItemHash[ModifyBuffer.id].hash[i]!=OriginHash[i]&&RecordItemHash[ModifyBuffer.id].hash[i]!=2}"
+              *ngFor="let item of OriginHash.slice(0,72); let i=index">{{item}}</span>
+          </div>
+          <div>
+            源hash:<span class="bitchar"
+              [ngClass]="{'bcred': RecordItemHash[ModifyBuffer.id].hash[i+72]!=OriginHash[i+72]&&RecordItemHash[ModifyBuffer.id].hash[i+72]!=2}"
+              *ngFor="let item of RecordItemHash[ModifyBuffer.id].hash.slice(72,144); let i=index">{{item}}</span>
+          </div>
+          <div>
+            现hash:<span class="bitchar"
+              [ngClass]="{'bcred': RecordItemHash[ModifyBuffer.id].hash[i+72]!=OriginHash[i+72]&&RecordItemHash[ModifyBuffer.id].hash[i+72]!=2}"
+              *ngFor="let item of OriginHash.slice(72,144); let i=index">{{item}}</span>
+          </div>
+        </div>
+      </section>
+      <footer mdcDialogFooter>
+        <button mdcButton mdcDialogCancel>取消</button>
+        <button mdcButton mdcDialogAccept (click)="Merge()">取均值合并</button>
+        <button mdcButton mdcDialogAccept (click)="Replace()">替换源Hash</button>
+      </footer>
     </div>
     <div mdcDialogBackdrop></div>
-</aside>
+  </aside>
+  <aside #dialogExport="mdcDialog" mdcDialog mdcFocusTrap>
+    <div mdcDialogSurface>
+      <header mdcDialogHeader>
+        <h2 mdcDialogHeaderTitle>导出数据</h2>
+      </header>
+      <section mdcDialogBody>
+        <div mdcTextField [dense]="true">
+          <textarea #Input1 mdcTextFieldInput [value]="Data()"></textarea>
+        </div>
+      </section>
+      <footer mdcDialogFooter>
+        <button mdcButton mdcDialogCancel>取消</button>
+        <button mdcButton mdcDialogAccept (click)="Copy(Input1)">复制</button>
+      </footer>
+    </div>
+    <div mdcDialogBackdrop></div>
+  </aside>
+  <aside #dialogImport="mdcDialog" mdcDialog mdcFocusTrap>
+    <div mdcDialogSurface>
+      <header mdcDialogHeader>
+        <h2 mdcDialogHeaderTitle>导入数据</h2>
+      </header>
+      <section mdcDialogBody>
+        <div mdcTextField [dense]="true">
+          <textarea #Input2 mdcTextFieldInput></textarea>
+        </div>
+      </section>
+      <footer mdcDialogFooter>
+        <button mdcButton mdcDialogCancel>取消</button>
+        <button mdcButton mdcDialogAccept (click)="Import(Input2)">导入</button>
+      </footer>
+    </div>
+    <div mdcDialogBackdrop></div>
+  </aside>
 </div>

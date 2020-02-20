@@ -226,7 +226,7 @@ export class DetectSetttingComponent implements OnInit {
                 this.ModifyingItem = {
                     id: this.detectedItem[0].id,
                     name: this.ItemNames[this.detectedItem[0].id],
-                    item: this.detectedItem
+                    item: this.detectedItem.filter(a => a.id in this.ItemNames)
                 };
                 for (const key of Object.keys(this.ModifyingItem)) {
                     if (typeof this.ModifyingItem[key] !== 'object') {
