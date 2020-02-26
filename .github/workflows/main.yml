@@ -6,52 +6,36 @@ on:
       - master
 
 jobs:
-  build-github:
+  build-on-push:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1      
-      - uses: actions/setup-python@v1
-        with:
-          python-version: '3.7'
-          architecture: 'x64'
+      - uses: actions/checkout@v1
       - name: Use Node.js 10.15.3
         uses: actions/setup-node@v1
         with:
           node-version: "10.15.3"
-      - name: npm install, build, and deploy
+      - name: Install node_modules
         run: |
           npm i -s
           npm install -g @angular/cli
-          ng build --prod --base-href "https://aktools.graueneko.xyz/"
-          npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=graueneko@gmail.com --name="graueneko"
+      - name: Build & deploy gh-pages
+        run: |
+          ng build --prod --base-href "https://$CNAME/"
+          npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=$EMAIL --name="graueneko"
         env:
-          CI: true
           TOKEN: ${{ secrets.GH_TOKEN }}
           CNAME: aktools.graueneko.xyz
           REPO: github.com/graueneko/aktools.git
-          PROJECT: aktools
-  build-coding:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1      
-      - uses: actions/setup-python@v1
-        with:
-          python-version: '3.7'
-          architecture: 'x64'
-      - name: Use Node.js 10.15.3
-        uses: actions/setup-node@v1
-        with:
-          node-version: "10.15.3"
-      - name: npm install, build, and deploy
+      - name: Build & deploy coding-pages
         run: |
-          npm i -s
-          npm install -g @angular/cli
-          ng build --prod --base-href "https://aktoolscn.graueneko.xyz/"
-          npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=graueneko@gmail.com --name="graueneko"  --branch=coding-pages
+          ng build --prod --base-href "https://$CNAME/"
+          npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=$EMAIL --name="graueneko"  --branch=coding-pages
         env:
-          CI: true
           TOKEN: ${{ secrets.CODING_TOKEN }}
           CNAME: aktoolscn.graueneko.xyz
           REPO: e.coding.net/graueneko/aktools.git
-          PROJECT: aktools
+    env:
+      CI: true
+      PROJECT: aktools
+      EMAIL: graueneko@gmail.com
