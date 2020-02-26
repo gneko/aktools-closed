@@ -28,7 +28,12 @@
           <div>
             <button mdcButton raised dense (click)="plan()">开始规划</button>
           </div>
+          <div>
+            <button mdcButton raised dense>选择关卡</button>
+          </div>
         </div>
+        <app-stage-chooser></app-stage-chooser>
+        <li mdcListDivider></li>
         <h4>by <a href="https://github.com/ycremar/ArkPlanner">@ycremar</a>(算法) & <a
             href="https://github.com/invisiblearts/ArkPlanner">@invisiblearts</a>(数据)</h4>
         <h4>体力预计消耗：<strong>{{cost}}</strong></h4>
@@ -54,7 +59,7 @@
   </div>
   <div mdcDialogBackdrop></div>
 </aside>
-<aside #dialogData="mdcDialog" mdcDialog mdcFocusTrap>
+<aside #dialogData="mdcDialog" mdcDialog>
   <div mdcDialogSurface class="dialog-data">
     <section mdcDialogBody>
       <div fxLayout="column" fxLayoutAlign="start center">

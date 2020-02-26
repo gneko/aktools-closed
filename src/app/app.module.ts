@@ -25,6 +25,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { AutoDetectComponent } from './auto-detect/auto-detect.component';
 import { AutoDetectHashComponent } from './auto-detect-hash/auto-detect-hash.component';
 import { DetectSetttingComponent } from './detect-setting/detect-setting.component';
+import { StageChooserComponent } from './stage-chooser/stage-chooser.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { DetectSetttingComponent } from './detect-setting/detect-setting.compone
     SettingsComponent,
     AutoDetectComponent,
     AutoDetectHashComponent,
-    DetectSetttingComponent
+    DetectSetttingComponent,
+    StageChooserComponent
   ],
   imports: [
     BrowserModule,
