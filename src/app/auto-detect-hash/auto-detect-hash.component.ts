@@ -61,7 +61,7 @@ export class AutoDetectHashComponent implements OnInit {
     this.Canvas = this.el.nativeElement.getElementsByTagName('canvas')[0];
     this.Ctx = this.Canvas.getContext('2d');
     this.MaxFontSize = this.fetchService.getLocalStorage('detect-mfs', true);
-    this.textColor = this.fetchService.getLocalStorage('detect-tclr', '#11FF11');
+    this.textColor = this.fetchService.getLocalStorage('detect-tclr', '#00ff00');
     this.onPasteImage();
   }
   ModifyData(dialog: any, e: MouseEvent) {
