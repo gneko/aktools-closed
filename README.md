@@ -60,11 +60,11 @@
 
 1. 开发请注意移动优先(Mobile First);
 2. 尽管代码格式可能会随 TSLint 的配置不同发生变化，还请尽可能减少 PR 中未修改部分的代码变动;
-3. 可以适量引入新图片、数据文件，但请勿加入过多、过大，以免国内网络访问过慢。
+3. 可以适量引入新图片、数据文件，但请勿加入过多、过大，~~以免国内网络访问过慢~~。
 
 #### 参与开发您可能需要以下文档:
 
-1. [Angular 8 中文文档](https://angular.cn/docs), or [Angular 8 Docs(en)](https://angular.io/docs)
+1. [Angular 9 中文文档](https://angular.cn/docs), or [Angular 9 Docs(en)](https://angular.io/docs)
 2. [Blox Material Components](https://blox.src.zone/material/components)
 3. [Angular Flex Layout](https://github.com/angular/flex-layout)
 
