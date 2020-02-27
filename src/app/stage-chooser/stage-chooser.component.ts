@@ -21,16 +21,12 @@ export class StageChooserComponent implements OnInit {
   choicePreset = "";
   ngOnInit() {
     this.stageList = this.fetchService.getLocalStorage("stageList", { preset: { zh_CN: [] } });
-    if (this.stageList.preset["zh_CN"].length == 0) {
-      this.updateStage();
-    } else {
-      this.initData();
-    }
+    this.updateStage();
   }
   updateStage() {
     this.fetchService.getJson('./assets/data/StageList.json').subscribe(stageList => {
       this.stageList = stageList;
-      this.stageList.preset.default = this.stageList.preset["zh_CN"];
+      if (!this.stageList.preset.default) this.stageList.preset.default = this.stageList.preset["zh_CN"];
       this.fetchService.setLocalStorage("stageList", stageList);
       this.initData();
     })
