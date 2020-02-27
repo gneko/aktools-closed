@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FetchService } from '../fetch.service';
 import { MdcListItemSecondaryTextDirective, MdcSnackbarService } from '@blox/material';
 import { MaterialItemData } from '../model/materialitemdata';
@@ -13,7 +13,8 @@ import { MaterialItem } from '../model/materialitem';
 export class MaterialComponent implements OnInit {
   // Options
   options: any;
-
+  chooseStage = false;
+  @ViewChild('chooser') chooser;
   // Items data
   items: Array<MaterialInfo>;
   mByLvl: Array<Array<string>>;
@@ -32,11 +33,12 @@ export class MaterialComponent implements OnInit {
   importedData = '';
 
   request: any = {
-    owned: null, 
-    required: null, 
-    exp_demand: false, 
-    extra_outc: false, 
-    gold_demand: false
+    owned: null,
+    required: null,
+    exp_demand: false,
+    extra_outc: false,
+    gold_demand: false,
+    exclude: []
   }
 
   calc(): void {
@@ -198,8 +200,9 @@ export class MaterialComponent implements OnInit {
         }
       }
     }
-    this.request.owned=owned;
-    this.request.required=required;
+    this.request.exclude = this.chooser.exclude;
+    this.request.owned = owned;
+    this.request.required = required;
     this.planResult = this.fetchService.postJson('https://planner.penguin-stats.io/plan/',
       this.request)
       .subscribe(plan => {

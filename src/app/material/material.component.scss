@@ -54,7 +54,9 @@ section {
     // border-color: $color-primary;
   }
 }
-
+[mdcListDivider] {
+  list-style: none;
+}
 .mdc-text-field__input {
   padding: 0.25em 0.75em;
   font-size: small;
