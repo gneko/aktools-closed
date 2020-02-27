@@ -1,8 +1,18 @@
-<div fxLayout="row wrap" fxLayoutAlign>
-  <div mdcFormField>
+<li mdcListDivider></li>
+<button mdcButton raised (click)="choiceAll()">全选</button>
+<button mdcButton raised (click)="invert()">反选</button>
+<div mdcSelect>
+  <select mdcSelectControl [(ngModel)]="choicePreset">
+    <option *ngFor="let preset of presets" [value]="preset">{{preset}}</option>
+  </select>
+  <label mdcFloatingLabel>预设</label>
+</div>
+<button mdcButton raised dense (click)="loadPreset()">加载预设</button>
+<div fxLayout="row wrap" fxLayoutAlign="start center">
+  <div *ngFor="let stage of stageList.preset['zh_CN']" mdcFormField>
     <div mdcCheckbox>
-      <input mdcCheckboxInput type="checkbox"/>
+      <input data-checkbox="stage" [value]="stage" mdcCheckboxInput type="checkbox" (click)="change()" [checked]="stageList.preset.default.includes(stage)"/>
     </div>
-    <label mdcFormFieldLabel>5-11</label>
+    <label mdcFormFieldLabel>{{ stage }}</label>
   </div>
 </div>
