@@ -30,7 +30,7 @@ def addId(stage):
   return output
 def removeTR(stage):
   #去除剿灭作战和教程关/突袭模式/超难关
-  if(re.search("(TR-\d+|H\d+-\d+)",stage["code"]) or not re.search("-",stage["code"]) or re.search("#f#",stage["stageId"])):
+  if(re.search("(TR-\d+|H\d+-\d+|PR-[A-Z]-\d+)",stage["code"]) or not re.search("-",stage["code"]) or re.search("#f#",stage["stageId"])):
     return False
   return True
 def checkActivityOpen(stage):
