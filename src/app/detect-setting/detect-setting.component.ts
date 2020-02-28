@@ -130,7 +130,7 @@ export class DetectSetttingComponent implements OnInit {
                         val += sval[i];
                     }
                     return val;
-                }).map(v => v)
+                })
             })(), count: count, id: null
         }
     }
@@ -156,7 +156,6 @@ export class DetectSetttingComponent implements OnInit {
         this.detectedItem = [];
         this.Lock = false;
         this.RecordItemHash = {};
-        this.OriginHash = [];
         this.ItemHashList = this.ItemHashList;
         this.worker.postMessage({ method: "LoadHashData", Data: this.ItemHashList });
         for (let item of this.ItemHashList) {
@@ -236,6 +235,9 @@ export class DetectSetttingComponent implements OnInit {
                 break;
         }
     }
+    get ModifyingConfidence(){
+      return this.ModifyingItem.item.find((v) => v.id == this.ModifyBuffer.id).confidence;
+    }
     Merge() {
         if (this.ModifyBuffer.id.toString() == "0000") {
             return;
@@ -298,7 +300,7 @@ export class DetectSetttingComponent implements OnInit {
         this.worker.postMessage({ method: 'getItemHashs', index: this.XBound.length * y + x });
         dialog.open();
     }
-    Data() {
+    get Data() {
         return localStorage.getItem('detect-setting');
     }
 }

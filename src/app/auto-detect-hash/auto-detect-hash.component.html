@@ -38,11 +38,14 @@
                             <select mdcSelectControl [(ngModel)]="ModifyBuffer.id" [disabled]='ModifyBuffer.delete'>
                                 <option *ngFor="let item of ModifyingItem.item; let i=index" [value]="item.id"
                                     ng-selected="i === 0">
-                                    {{ItemNames[item.id]}}</option>
+                                    {{ItemNames[item.id] || item.name}}</option>
                             </select>
                             <label mdcFloatingLabel></label>
                         </div>
                     </ng-container>
+                    <div *ngIf="ModifyingItem!==null" style="text-align: center;">
+                      判断的物品相似度为{{ModifyingConfidence * 100 | number:'1.0-3'}}%
+                    </div>
                     <ng-container *ngIf="ModifyingItem!==null">
                         <div mdcTextField dense class="input-field" style="width:80%;">
                             <span>
