@@ -25,6 +25,7 @@ jobs:
         run: |
           pip install requests
           python ./tools/extractMaterials.py
+          python ./tools/extractStages.py
           git config --global user.name "Neko Bot"
           git config --global user.email "graueneko@gmail.com"
           git checkout "${GITHUB_REF:11}"
