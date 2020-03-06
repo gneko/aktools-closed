@@ -26,11 +26,11 @@ def readJson(path , server = "zh_CN"):
         with open(base + path, encoding='utf-8') as f:
             return json.load(f, encoding='utf-8')
 def addId(stage):
-  output={"stageId":stage[0],"code":stage[1]["code"]}
+  output={"stageId":stage[0],"code":stage[1]["code"],"drop":stage[1]["displayMainItem"]} #排除龙门币关
   return output
 def removeTR(stage):
-  #去除剿灭作战和教程关/突袭模式/超难关
-  if(re.search("(TR-\d+|H\d+-\d+|PR-[A-Z]-\d+)",stage["code"]) or not re.search("-",stage["code"]) or re.search("#f#",stage["stageId"])):
+  #去除剿灭作战和教程关/突袭模式/超难关/龙门币支线关/物资筹备
+  if(stage["drop"] == "4001" or re.search("(TR-\d+|H\d+-\d+|PR-[A-Z]-\d+|LS-\d+|SK-\d+|CA-\d+|AP-\d+)",stage["code"]) or not re.search("-",stage["code"]) or re.search("#f#",stage["stageId"])):
     return False
   return True
 def checkActivityOpen(stage):
