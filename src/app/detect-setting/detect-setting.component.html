@@ -28,14 +28,16 @@
             <div mdcSelect style="width:80%;">
               <select mdcSelectControl [(ngModel)]="ModifyBuffer.id" [disabled]='ModifyBuffer.delete'>
                 <option *ngFor="let item of ModifyingItem.item; let i=index" [value]="item.id" ng-selected="i === 0">
-                  {{ItemNames[item.id]}}</option>
+                  {{ItemNames[item.id] || item.name}}</option>
               </select>
               <label mdcFloatingLabel></label>
             </div>
           </ng-container>
         </div>
         <div *ngIf="ModifyingItem!==null" style="text-align: center;">
-          源物品数据为{{RecordItemHash[ModifyBuffer.id].count}}个数据的平均值</div>
+          源物品数据为{{RecordItemHash[ModifyBuffer.id].count}}个数据的平均值<br />
+          判断的物品相似度为{{ModifyingConfidence * 100 | number:'1.0-3'}}%
+        </div>
         <div *ngIf="ModifyingItem!==null">
           <div>
             源hash:<span class="bitchar"
@@ -74,7 +76,7 @@
       </header>
       <section mdcDialogBody>
         <div mdcTextField [dense]="true">
-          <textarea #Input1 mdcTextFieldInput [value]="Data()"></textarea>
+          <textarea #Input1 mdcTextFieldInput [value]="Data"></textarea>
         </div>
       </section>
       <footer mdcDialogFooter>
