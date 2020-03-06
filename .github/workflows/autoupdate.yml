@@ -12,7 +12,7 @@ jobs:
       - name: Fetch data version
         run: |
           curl -sL https://api.github.com/repos/Kengxxiao/ArknightsGameData/commits | grep -m1 "CN UPDATE" > version/data
-          if ! [ -n "$(git status --porcelain)" ]; then
+          if [ -n "$(git status --porcelain)" ]; then
             echo "::set-env name=UPDATE::1"
           fi
       - uses: actions/setup-python@v1
@@ -42,6 +42,7 @@ jobs:
           TOKEN: ${{ secrets.CODING_TOKEN }}
           REPO: e.coding.net/graueneko/aktools.git
       - name: Do push
+        if: env.UPDATE==1
         run: git push
     env:
       CI: true
