@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Fetch data version
         run: |
-          curl -sL https://api.github.com/repos/Kengxxiao/ArknightsGameData/commits | grep -m1 "CN UPDATE" > version/data
+          curl -sL https://github.com/Kengxxiao/ArknightsGameData/commits/master.atom | grep -m1 "CN UPDATE" > version/data
           if [ -n "$(git status --porcelain)" ]; then
             echo "::set-env name=UPDATE::1"
           fi
