@@ -34,7 +34,7 @@ let NumbersHashList: Array<any> = [{
   "count": 19
 }, {
   "number": 8,
-  
+
   "hash": [12, 18, 18, 8, 1, 0, 0, 0, 19, 3, 0, 0, 13, 19, 8, 0, 16, 0, 0, 0, 3, 17, 17, 1, 19, 1, 0, 0, 3, 19, 17, 0, 13, 19, 8, 0, 3, 8, 0, 0, 19, 12, 0, 5, 16, 6, 0, 0, 9, 0, 0, 0, 5, 18, 19, 5, 1, 0, 0, 0, 0, 6, 19, 11, 13, 0, 0, 0, 6, 18, 17, 4, 17, 19, 13, 5, 3, 3, 0, 0],
   "count": 19
 }, {
@@ -176,7 +176,8 @@ addEventListener('message', (message) => {
       XBound = [[]];
       YBound = [[]];
       HashList = [];
-      NumberHashList = []
+      OriginHashList = [];
+      NumberHashList = [];
       fillPixelData(message.data.data);
       postMessage({ method: "status", text: "分析图像边界", progress: 0.2 });
       analyzeBound();
@@ -184,21 +185,8 @@ addEventListener('message', (message) => {
       postMessage({ method: "clipImage", XBound: XBound, YBound: YBound });
       break;
     case "calcDhash":
-      HashList = message.data.ImageDatas.map((item: ImageData) => {
-        let HashString = "";
-        for (let index = 0; index < item.data.length; index += 4) {
-          if (Math.floor(index / 4) % item.width == 0) continue;
-          if (Math.floor((item.data[index - 4] + item.data[index - 3] + item.data[index - 2]) / 3) > Math.floor((item.data[index] + item.data[index + 1] + item.data[index + 2]) / 3)) {
-            HashString += 1
-          } else {
-            HashString += 0
-          }
-        }
-        return HashString
-      });
-      OriginHashList = [...HashList];
-      postMessage({ method: "status", text: "正在判断图像对应的物品", progress: 0.45 });
-      HashList = HashList.map((hash: String) => {
+      if (typeof message.data.index != "undefined" && OriginHashList.length !== 0) {
+        let hash = OriginHashList[message.data.index];
         const ConfidenceFilter = ItemHashList.map((hashs) => {
           let Confidence = 0;
           let AllLength = 144;
@@ -206,12 +194,14 @@ addEventListener('message', (message) => {
             if (hash[i] == "1") { Confidence += hashs.hash[i]; } else { Confidence += 1 - hashs.hash[i]; }
           }
           Confidence /= AllLength;
-          return {
-            id:hashs.id,
-            hash:hashs.hash,
-            confidence:Confidence,
-            count:hashs.count
-          }; // 深拷贝
+          let TempDataBuffer: any = {
+            id: hashs.id,
+            hash: hashs.hash,
+            confidence: Confidence,
+            count: hashs.count
+          } // 深拷贝
+          if (hashs.name) { TempDataBuffer.name = hashs.name }
+          return TempDataBuffer;
         }).sort((a, b) => {
           return b.confidence - a.confidence
         })
@@ -223,10 +213,54 @@ addEventListener('message', (message) => {
             confidence: 1
           });
         }
-        return ConfidenceFilter;
-      });
-      postMessage({ method: "status", text: "主线程切割数字(页面可能暂时卡死)", progress: 0.57 });
-      postMessage({ method: "getNumberData" });
+        HashList[message.data.index] = ConfidenceFilter;
+      } else {
+        HashList = message.data.ImageDatas.map((item: ImageData) => {
+          let HashString = "";
+          for (let index = 0; index < item.data.length; index += 4) {
+            if (Math.floor(index / 4) % item.width == 0) continue;
+            if (Math.floor((item.data[index - 4] + item.data[index - 3] + item.data[index - 2]) / 3) > Math.floor((item.data[index] + item.data[index + 1] + item.data[index + 2]) / 3)) {
+              HashString += 1
+            } else {
+              HashString += 0
+            }
+          }
+          return HashString
+        });
+        OriginHashList = [...HashList];
+        postMessage({ method: "status", text: "正在判断图像对应的物品", progress: 0.45 });
+        HashList = HashList.map((hash: String) => {
+          const ConfidenceFilter = ItemHashList.map((hashs) => {
+            let Confidence = 0;
+            let AllLength = 144;
+            for (let i = 0; i < hash.length; i++) {
+              if (hash[i] == "1") { Confidence += hashs.hash[i]; } else { Confidence += 1 - hashs.hash[i]; }
+            }
+            Confidence /= AllLength;
+            let TempDataBuffer: any = {
+              id: hashs.id,
+              hash: hashs.hash,
+              confidence: Confidence,
+              count: hashs.count
+            } // 深拷贝
+            if (hashs.name) { TempDataBuffer.name = hashs.name }
+            return TempDataBuffer;
+          }).sort((a, b) => {
+            return b.confidence - a.confidence
+          })
+          if (ConfidenceFilter[0].confidence <= 0.75) {
+            ConfidenceFilter.unshift({
+              id: "0000",
+              hash: "",
+              count: 0,
+              confidence: 1
+            });
+          }
+          return ConfidenceFilter;
+        });
+        postMessage({ method: "status", text: "主线程切割数字(页面可能暂时卡死)", progress: 0.57 });
+        postMessage({ method: "getNumberData" });
+      }
       break;
     case "getItemCount":
       postMessage({ method: "status", text: "正在识别物品数量", progress: 0.6 });

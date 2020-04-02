@@ -112,8 +112,8 @@ export class AutoDetectHashComponent implements OnInit {
     // //console.dir(dialog);
     dialog.open();
   }
-  get ModifyingConfidence(){
-    return this.ModifyingItem.item.find((v) => v.id == this.ModifyBuffer.id).confidence;
+  get ModifyingConfidence() {
+    return (this.ModifyingItem.item.find((v) => v.id == this.ModifyBuffer.id) || ({ confidence: 0 })).confidence;
   }
   AcceptModify() {
     const y = this.Modifying.y;
