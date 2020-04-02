@@ -14,8 +14,9 @@ base = "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/%s/
 # base = r"C:\Users\user\ArknightsGameData\zh_CN\gamedata"
 
 servers = ["en_US", "ja_JP", "ko_KR", "zh_CN"]
-newData = {"allStage": [], "preset": {}}
+newData = {"allStage": [], "preset": {},"ActivityName":{}}
 
+datafile = "./src/static/data/StageList.json"
 
 def readJson(path, server="zh_CN"):
     if base.startswith("http"):
@@ -38,9 +39,7 @@ def addId(stage):
 
 def removeTR(stage):
     # 去除剿灭作战和教程关/突袭模式/超难关/龙门币支线关/物资筹备
-    if stage["drop"] == "4001":
-        return False
-    if re.search(r"(TR-\d+|H\d+-\d+|PR-[A-Z]-\d+|LS-\d+|SK-\d+|CA-\d+|AP-\d+)", stage["code"]):
+    if re.search(r"(TR-\d+|H\d+-\d+|PR-[A-Z]-\d+|LS-\d+|SK-\d+|CA-\d+|AP-\d+|CE-\d+)", stage["code"]):
         return False
     if not re.search("-", stage["code"]):
         return False
@@ -50,6 +49,7 @@ def removeTR(stage):
 
 
 def checkActivityOpen(stage):
+    stage["stageId"].split("-")[0]
     if StageRawData["stageValidInfo"].__contains__(stage["stageId"]):
         StageTime = StageRawData["stageValidInfo"][stage["stageId"]]
         if(time.time() > StageTime["startTs"] and (StageTime["endTs"] == -1 or time.time() < StageTime["endTs"])):
@@ -69,7 +69,7 @@ def ordered(obj):
         return obj
 
 
-with open("./src/assets/data/StageList.json", "r", encoding="utf-8") as f:
+with open(datafile, "r", encoding="utf-8") as f:
     oldData = json.load(f)
 
 
@@ -78,13 +78,17 @@ for server in servers:
     StageRawData["stages"] = list(
         filter(removeTR, map(addId, StageRawData["stages"].items())))
     if(server == "zh_CN"):
-        # 外服测试服
+        ActivityRawData = readJson("/excel/activity_table.json", server)
+        for Stage in StageRawData["stages"]:
+            if(ActivityRawData["basicInfo"].__contains__(Stage["stageId"].split("_")[0])):
+                StageCode=Stage["code"].split("-")[0]
+                newData["ActivityName"][StageCode]=ActivityRawData["basicInfo"][Stage["stageId"].split("_")[0]]["name"]
         newData["allStage"] = list(
             map(lambda a: a["code"], StageRawData["stages"]))
     newData["preset"][server] = list(
         map(lambda a: a["code"], filter(checkActivityOpen, StageRawData["stages"])))
 
 if ordered(oldData) != ordered(newData):
-    with open("./src/assets/data/StageList.json", "w", encoding="utf-8") as f:
+    with open(datafile, "w", encoding="utf-8") as f:
         json.dump(newData, f, ensure_ascii=False)
     print("关卡数据", end="")

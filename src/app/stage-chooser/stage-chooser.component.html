@@ -1,18 +1,45 @@
 <li mdcListDivider></li>
-<button mdcButton raised (click)="choiceAll()">全选</button>
-<button mdcButton raised (click)="invert()">反选</button>
-<div mdcSelect>
-  <select mdcSelectControl [(ngModel)]="choicePreset">
-    <option *ngFor="let preset of presets" [value]="preset">{{preset}}</option>
-  </select>
-  <label mdcFloatingLabel>预设</label>
+<div fxLayout="row" fxLayoutGap="2%" fxLayoutAlign="start center">
+  <button mdcButton raised (click)="choiceAll()">全选</button>
+  <button mdcButton raised (click)="invert()">反选</button>
+  <div mdcSelect style="min-width: 120px;">
+    <select mdcSelectControl [(ngModel)]="choicePreset">
+      <option *ngFor="let preset of presets" [value]="preset">{{
+        preset
+      }}</option>
+    </select>
+    <label mdcFloatingLabel>预设</label>
+  </div>
+  <button mdcButton raised (click)="loadPreset()" style="min-width: 96px;">加载预设</button>
+  <div mdcTextField style="min-width: 120px;">
+    <input #PresetName mdcTextFieldInput type="text" />
+    <label mdcFloatingLabel>预设名称</label>
+  </div>
+  <button mdcButton raised (click)="savePreset(PresetName)" style="min-width: 96px;">
+    保存预设
+  </button>
 </div>
-<button mdcButton raised dense (click)="loadPreset()">加载预设</button>
-<div fxLayout="row wrap" fxLayoutAlign="start center">
-  <div *ngFor="let stage of stageList.preset['zh_CN']" mdcFormField>
+<div
+  *ngFor="let MainZone of this.willRenderStage.Main; let i = index"
+  fxLayout="row wrap"
+  fxLayoutAlign="start center"
+>
+  <div style="width: 100%;">
+    <h3 style="display: inline;margin-right: 15px;">第{{ i }}章</h3>
+    <button mdcButton raised (click)="choiceAll(MainZone)">全选</button>
+    <button mdcButton raised (click)="invert(MainZone)">反选</button>
+  </div>
+  <div mdcFormField *ngFor="let Stage of MainZone">
     <div mdcCheckbox>
-      <input data-checkbox="stage" [value]="stage" mdcCheckboxInput type="checkbox" (click)="change()" [checked]="stageList.preset.default.includes(stage)"/>
+      <input
+        data-checkbox="stage"
+        [value]="stage"
+        mdcCheckboxInput
+        type="checkbox"
+        (click)="change($event, Stage)"
+        [checked]="Stage[1]"
+      />
     </div>
-    <label mdcFormFieldLabel>{{ stage }}</label>
+    <label mdcFormFieldLabel>{{ Stage[0] }}</label>
   </div>
 </div>

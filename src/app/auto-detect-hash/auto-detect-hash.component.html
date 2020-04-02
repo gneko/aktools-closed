@@ -1,83 +1,138 @@
 <div class="ad-containr" fxLayout="column">
-    <div mdcCard class="card-title" fxLayout="row wrap" fxLayoutAlign="center center">
-        <button mdcButton raised dense type="button" (click)="fileInput.click();">
-            选择仓库图片
+  <div
+    mdcCard
+    class="card-title"
+    fxLayout="row wrap"
+    fxLayoutAlign="center center"
+  >
+    <button mdcButton raised dense type="button" (click)="fileInput.click()">
+      选择仓库图片
+    </button>
+    <input
+      #fileInput
+      type="file"
+      id="test-image-file"
+      name="test"
+      accept="image/gif, image/jpeg, image/png, image/jpg"
+      (change)="choiceImage($event)"
+      style="display:none;"
+    /><br />
+    <button
+      mdcButton
+      raised
+      dense
+      [disabled]="!ImageLoaded || Lock"
+      (click)="objectRegonition()"
+    >
+      开始识别
+    </button>
+    <a (click)="Route()" style="cursor:pointer;float:right"
+      >&nbsp;&nbsp;&nbsp;<small>识别率低？设置属于自己的识别数据！</small></a
+    >
+  </div>
+  <div mdcCard fxLayout="row wrap">
+    <div mdcCardActions fullBleed fxFlex="100">
+      <a mdcButton id="save-import" (click)="toMaterialCalc()">
+        保存并导入材料计算器
+        <i class="material-icons" aria-hidden="true">arrow_forward</i>
+      </a>
+    </div>
+  </div>
+  <div mdcCard>
+    <p style="text-align:center;margin:5px auto;">{{ InfoText }}</p>
+  </div>
+  <div mdcLinearProgress [progressValue]="progress" bufferValue="1"></div>
+  <div id="canvas-box">
+    <canvas ngClass.lt-sm="lt-sm" (click)="ModifyData(dialog, $event)"
+      >浏览器不支持Canvas 建议您换用最新版的Chrome/Firefox浏览器</canvas
+    >
+  </div>
+  <aside #dialog="mdcDialog" mdcDialog mdcFocusTrap>
+    <div mdcDialogSurface>
+      <header mdcDialogHeader>
+        <h2 mdcDialogHeaderTitle>修改数据</h2>
+      </header>
+      <section mdcDialogBody>
+        <div id="headImage" style="text-align: center;">
+          <img [src]="ItemImage || ''" style="margin: 0 auto;" width="100" />
+        </div>
+        <div id="DataChange" style="text-align: center;">
+          <ng-container *ngIf="ModifyingItem !== null">
+            <div mdcSelect style="width:80%;">
+              <select
+                mdcSelectControl
+                [(ngModel)]="ModifyBuffer.id"
+                [disabled]="ModifyBuffer.delete"
+              >
+                <option
+                  *ngFor="let item of ModifyingItem.item; let i = index"
+                  [value]="item.id"
+                  ng-selected="i === 0"
+                >
+                  {{ ItemNames[item.id] || item.name }}</option
+                >
+              </select>
+              <label mdcFloatingLabel></label>
+            </div>
+          </ng-container>
+          <div *ngIf="ModifyingItem !== null" style="text-align: center;">
+            判断的物品相似度为{{ ModifyingConfidence * 100 | number: "1.0-3" }}%
+          </div>
+          <ng-container *ngIf="ModifyingItem !== null">
+            <div mdcTextField dense class="input-field" style="width:80%;">
+              <span>
+                <button
+                  mdcButton
+                  dense
+                  [disabled]="ModifyBuffer.delete"
+                  (click)="
+                    ModifyBuffer.have =
+                      ModifyBuffer.have - (ModifyBuffer.have > 0 ? 1 : 0)
+                  "
+                >
+                  <i mdcButtonIcon class="material-icons">remove</i>
+                </button>
+              </span>
+              <span style="width:100%;">
+                <input
+                  mdcTextFieldInput
+                  type="number"
+                  [(ngModel)]="ModifyBuffer.have"
+                  [disabled]="ModifyBuffer.delete"
+                />
+                <label mdcFloatingLabel class="mdc-floating-label--float-above"
+                  >识别结果</label
+                >
+              </span>
+              <span>
+                <button
+                  mdcButton
+                  dense
+                  [disabled]="ModifyBuffer.delete"
+                  (click)="ModifyBuffer.have = ModifyBuffer.have + 1"
+                >
+                  <i mdcButtonIcon class="material-icons">add</i>
+                </button>
+              </span>
+            </div>
+          </ng-container>
+          <p *ngIf="ModifyingItem !== null && ModifyBuffer.delete">
+            {{
+              ItemNames.hasOwnProperty(ModifyBuffer.id)
+                ? "该材料已被删除"
+                : "该材料不计入材料计算"
+            }}
+          </p>
+        </div>
+      </section>
+      <footer mdcDialogFooter>
+        <button mdcButton *ngIf="ModifyingItem !== null" (click)="toggleItem()">
+          {{ ModifyBuffer.delete ? "恢复该材料" : "删除该材料" }}
         </button>
-        <input #fileInput type="file" id="test-image-file" name="test"
-            accept="image/gif, image/jpeg, image/png, image/jpg" (change)="choiceImage($event)"
-            style="display:none;"><br>
-        <button mdcButton raised dense [disabled]="!ImageLoaded || Lock" (click)="objectRegonition()">开始识别</button>
-        <a (click)="Route()" style="cursor:pointer;float:right">&nbsp;&nbsp;&nbsp;<small>识别率低？设置属于自己的识别数据！</small></a>
+        <button mdcButton mdcDialogCancel>取消</button>
+        <button mdcButton mdcDialogAccept (click)="AcceptModify()">确定</button>
+      </footer>
     </div>
-    <div mdcCard fxLayout="row wrap">
-        <div mdcCardActions fullBleed fxFlex="100">
-            <a mdcButton id="save-import" (click)="toMaterialCalc()">
-                保存并导入材料计算器 <i class="material-icons" aria-hidden="true">arrow_forward</i>
-            </a>
-        </div>
-    </div>
-    <div mdcCard>
-        <p style="text-align:center;margin:5px auto;">{{InfoText}}</p>
-    </div>
-    <div mdcLinearProgress [progressValue]="progress" bufferValue="1"></div>
-    <div id="canvas-box">
-        <canvas ngClass.lt-sm="lt-sm" (click)="ModifyData(dialog,$event)">浏览器不支持Canvas 建议您换用最新版的Chrome/Firefox浏览器</canvas>
-    </div>
-    <aside #dialog="mdcDialog" mdcDialog mdcFocusTrap>
-        <div mdcDialogSurface>
-            <header mdcDialogHeader>
-                <h2 mdcDialogHeaderTitle>修改数据</h2>
-            </header>
-            <section mdcDialogBody>
-                <div id="headImage" style="text-align: center;">
-                    <img [src]="ItemImage||''" style="margin: 0 auto;" width="100" />
-                </div>
-                <div id="DataChange" style="text-align: center;">
-                    <ng-container *ngIf="ModifyingItem!==null">
-                        <div mdcSelect style="width:80%;">
-                            <select mdcSelectControl [(ngModel)]="ModifyBuffer.id" [disabled]='ModifyBuffer.delete'>
-                                <option *ngFor="let item of ModifyingItem.item; let i=index" [value]="item.id"
-                                    ng-selected="i === 0">
-                                    {{ItemNames[item.id] || item.name}}</option>
-                            </select>
-                            <label mdcFloatingLabel></label>
-                        </div>
-                    </ng-container>
-                    <div *ngIf="ModifyingItem!==null" style="text-align: center;">
-                      判断的物品相似度为{{ModifyingConfidence * 100 | number:'1.0-3'}}%
-                    </div>
-                    <ng-container *ngIf="ModifyingItem!==null">
-                        <div mdcTextField dense class="input-field" style="width:80%;">
-                            <span>
-                                <button mdcButton dense [disabled]='ModifyBuffer.delete'
-                                    (click)="ModifyBuffer.have=ModifyBuffer.have-(ModifyBuffer.have>0?1:0)">
-                                    <i mdcButtonIcon class="material-icons">remove</i>
-                                </button>
-                            </span>
-                            <span style="width:100%;">
-                                <input mdcTextFieldInput type="number" [(ngModel)]="ModifyBuffer.have"
-                                    [disabled]='ModifyBuffer.delete'>
-                                <label mdcFloatingLabel class="mdc-floating-label--float-above">识别结果</label>
-                            </span>
-                            <span>
-                                <button mdcButton dense [disabled]='ModifyBuffer.delete'
-                                    (click)="ModifyBuffer.have=ModifyBuffer.have+1">
-                                    <i mdcButtonIcon class="material-icons">add</i>
-                                </button>
-                            </span>
-                        </div>
-                    </ng-container>
-                    <p *ngIf="ModifyingItem!==null&&ModifyBuffer.delete">
-                        {{ItemNames.hasOwnProperty(ModifyBuffer.id) ? "该材料已被删除" : "该材料不计入材料计算"}}</p>
-                </div>
-            </section>
-            <footer mdcDialogFooter>
-                <button mdcButton *ngIf="ModifyingItem!==null"
-                    (click)="toggleItem()">{{ModifyBuffer.delete ? "恢复该材料" : "删除该材料"}}</button>
-                <button mdcButton mdcDialogCancel>取消</button>
-                <button mdcButton mdcDialogAccept (click)="AcceptModify()">确定</button>
-            </footer>
-        </div>
-        <div mdcDialogBackdrop></div>
-    </aside>
+    <div mdcDialogBackdrop></div>
+  </aside>
 </div>
