@@ -16,7 +16,7 @@ base = "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/%s/
 servers = ["en_US", "ja_JP", "ko_KR", "zh_CN"]
 newData = {"allStage": [], "preset": {},"ActivityName":{}}
 
-datafile = "./src/static/data/StageList.json"
+datafile = "./src/assets/data/StageList.json"
 
 def readJson(path, server="zh_CN"):
     if base.startswith("http"):
