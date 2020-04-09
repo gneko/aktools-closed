@@ -49,7 +49,7 @@ export class StageChooserComponent implements OnInit {
         }
         if (!this.stageList.preset.default)
           this.stageList.preset.default = this.stageList.preset["zh_CN"];
-        this.fetchService.setLocalStorage("stageList", stageList);
+        this.fetchService.setLocalStorage("stageList", this.stageList);
         this.initData();
       });
   }
