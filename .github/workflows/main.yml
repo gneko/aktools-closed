@@ -21,8 +21,8 @@ jobs:
           npm install -g @angular/cli
       - name: Build & deploy gh-pages
         run: |
-          ng build --prod --base-href "https://$CNAME/"
-          npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=$EMAIL --name="graueneko"
+          # ng build --prod --base-href "https://$CNAME/"
+          # npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=$EMAIL --name="graueneko"
         env:
           TOKEN: ${{ secrets.GH_TOKEN }}
           CNAME: aktools.graueneko.xyz
@@ -33,7 +33,7 @@ jobs:
           npx angular-cli-ghpages --dir=dist/$PROJECT --repo=https://$TOKEN@$REPO --no-silent --cname=$CNAME --email=$EMAIL --name="graueneko"  --branch=coding-pages
         env:
           TOKEN: ${{ secrets.CODING_TOKEN }}
-          CNAME: aktoolscn.graueneko.xyz
+          CNAME: ak.capybaraaa.info
           REPO: e.coding.net/graueneko/aktools.git
     env:
       CI: true
